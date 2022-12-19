@@ -1,4 +1,4 @@
-package com.dietdiary.client;
+package com.dietdiary.components;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -12,10 +12,10 @@ import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
 import javax.swing.plaf.BorderUIResource.LineBorderUIResource;
 
-public class DiaryDefaultButton extends JButton{
+public class MyButton extends JButton{
 	String label;
 	Dimension labelSize;
-	public DiaryDefaultButton(String label) {
+	public MyButton(String label) {
 		super(label);
 		this.label = label;
 		Dimension d = getPreferredSize();

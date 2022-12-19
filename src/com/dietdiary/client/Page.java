@@ -2,8 +2,11 @@ package com.dietdiary.client;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 
+import javax.swing.JComponent;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 public class Page extends JPanel{
@@ -22,4 +25,5 @@ public class Page extends JPanel{
 		g.setColor(new Color(255, 255, 128));
 		g.fillRoundRect(0, 0, getWidth(), getHeight(), 50, 50);
 	}
+	
 }
