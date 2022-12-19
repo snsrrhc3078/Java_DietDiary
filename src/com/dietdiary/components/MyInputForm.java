@@ -5,6 +5,8 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.util.ArrayList;
 
+import javax.swing.JComboBox;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
@@ -13,7 +15,7 @@ import javax.swing.JTextField;
 public class MyInputForm extends JPanel{
 	
 	//혹시 나중에 접근하게 될 경우를 위한 ArrayList
-	ArrayList<JLabel> labels = new ArrayList<>();
+	ArrayList<JComponent> comps = new ArrayList<>();
 	ArrayList<JTextField> fields = new ArrayList<>();
 	
 	/**
@@ -35,6 +37,9 @@ public class MyInputForm extends JPanel{
 		
 		add(lb);
 		add(text);
+		
+		comps.add(lb);
+		fields.add(text);
 	}
 	public void addFormPasswordField(String label, int passwordFieldSize,int fontSize) {
 		JLabel lb = new JLabel(label);
@@ -47,12 +52,27 @@ public class MyInputForm extends JPanel{
 		
 		add(lb);
 		add(text);
+		
+		comps.add(lb);
+		fields.add(text);
 	}
-	
+	public void addCombobox(String[] items, int textFieldSize, int fontSize) {
+		JComboBox<String> box = new JComboBox<String>(items);
+		JTextField text = new JTextField(textFieldSize);
+		Font font = new Font(text.getFont().getFontName(), Font.BOLD, fontSize);
+		
+		text.setFont(font);
+		box.setPreferredSize(text.getPreferredSize());
+		
+		add(box);
+		add(text);
+		
+		comps.add(box);
+		fields.add(text);
+	}
 	
 	@Override
 	protected void paintComponent(Graphics g) {
-		
 	}
 
 }
