@@ -7,10 +7,31 @@ import java.util.ArrayList;
 
 import javax.swing.JFrame;
 
+import com.dietdiary.domain.DietDiaryMembers;
+import com.dietdiary.model.repository.DietDiaryMembersDAO;
+
 public class DietDiaryMain extends JFrame{
 	
 	ArrayList<Page> pages = new ArrayList<>();
 	
+	DietDiaryMembersDAO membersDAO = new DietDiaryMembersDAO();
+	private boolean isLogin = false;
+	private DietDiaryMembers loginedUserInfo;
+	
+	public boolean isLogin() {
+		return isLogin;
+	}
+	public void setLogin(boolean isLogin) {
+		this.isLogin = isLogin;
+	}
+	public DietDiaryMembers getLoginedUserInfo() {
+		return loginedUserInfo;
+	}
+	public void setLoginedUserInfo(DietDiaryMembers loginedUserInfo) {
+		this.loginedUserInfo = loginedUserInfo;
+	}
+	
+
 	public static final int LOGIN_PAGE = 0;
 	public static final int SIGN_UP_PAGE = 1;
 	
@@ -50,4 +71,5 @@ public class DietDiaryMain extends JFrame{
 	public static void main(String[] args) {
 		new DietDiaryMain();
 	}
+	
 }

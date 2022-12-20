@@ -18,6 +18,13 @@ public class MyInputForm extends JPanel{
 	ArrayList<JComponent> comps = new ArrayList<>();
 	ArrayList<JTextField> fields = new ArrayList<>();
 	
+	public ArrayList<JComponent> getComps() {
+		return comps;
+	}
+	public ArrayList<JTextField> getFields() {
+		return fields;
+	}
+	
 	/**
 	 * MyInputForm에 JLabel과 JTextField를 추가한다
 	 * 
