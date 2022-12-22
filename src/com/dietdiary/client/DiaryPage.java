@@ -178,5 +178,6 @@ public class DiaryPage extends Page {
 				}
 			}
 		}
+		diary.updateUI();
 	}
 }
