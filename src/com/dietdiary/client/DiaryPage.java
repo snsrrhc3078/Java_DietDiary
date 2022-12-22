@@ -178,10 +178,5 @@ public class DiaryPage extends Page {
 				}
 			}
 		}
-		for(int i =0;i<dates.length;i++) {
-			for(int j = 0;j<dates[i].length;j++) {
-				dates[i][j].showInfo();
-			}
-		}
 	}
 }
