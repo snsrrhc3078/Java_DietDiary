@@ -9,12 +9,23 @@ import javax.swing.JComponent;
 import javax.swing.JPanel;
 
 public class MyFormWrapper extends JPanel {
+	int arcSize;
+
 	public MyFormWrapper(JComponent comp, double widthRatio, double heightRatio) {
-		
+
 		int compWidth = comp.getPreferredSize().width;
 		int compHeight = comp.getPreferredSize().height;
-		setPreferredSize(new Dimension((int)(compWidth * widthRatio), (int)(compHeight * heightRatio)));
+		setPreferredSize(new Dimension((int) (compWidth * widthRatio), (int) (compHeight * heightRatio)));
+		arcSize = 50;
+		setLayout(new BorderLayout());
+	}
 
+	public MyFormWrapper(JComponent comp, double widthRatio, double heightRatio, int arcSize) {
+
+		int compWidth = comp.getPreferredSize().width;
+		int compHeight = comp.getPreferredSize().height;
+		setPreferredSize(new Dimension((int) (compWidth * widthRatio), (int) (compHeight * heightRatio)));
+		this.arcSize = arcSize;
 		setLayout(new BorderLayout());
 	}
 
@@ -25,6 +36,6 @@ public class MyFormWrapper extends JPanel {
 		g.setColor(new Color(255, 255, 128));
 		g.fillRect(0, 0, getWidth(), getHeight());
 		g.setColor(new Color(224, 184, 138));
-		g.fillRoundRect(0, 0, getWidth(), getHeight(), 50, 50);
+		g.fillRoundRect(0, 0, getWidth(), getHeight(), arcSize, arcSize);
 	}
 }
