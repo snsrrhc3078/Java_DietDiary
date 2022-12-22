@@ -9,33 +9,25 @@ import java.util.ArrayList;
 
 import javax.swing.JFrame;
 
+import com.dietdiary.client.date.DateInfoFrame;
 import com.dietdiary.domain.DietDiaryMembers;
 import com.dietdiary.model.repository.DietDiaryMembersDAO;
 import com.dietdiary.util.DBManager;
 
 public class DietDiaryMain extends JFrame{
 	
-	ArrayList<Page> pages = new ArrayList<>();
+	private ArrayList<Page> pages = new ArrayList<>();
+	DateInfoFrame dateInfoFrame;
 	
 	
 	DietDiaryMembersDAO membersDAO = new DietDiaryMembersDAO();
 	
 	
+	
 	private boolean isLogin = false;
 	private DietDiaryMembers loginedUserInfo;
 	
-	public boolean isLogin() {
-		return isLogin;
-	}
-	public void setLogin(boolean isLogin) {
-		this.isLogin = isLogin;
-	}
-	public DietDiaryMembers getLoginedUserInfo() {
-		return loginedUserInfo;
-	}
-	public void setLoginedUserInfo(DietDiaryMembers loginedUserInfo) {
-		this.loginedUserInfo = loginedUserInfo;
-	}
+	
 	
 
 	public static final int LOGIN_PAGE = 0;
@@ -54,6 +46,8 @@ public class DietDiaryMain extends JFrame{
 		setResizable(false);
 		setVisible(true);
 		setLocationRelativeTo(null);
+		
+		dateInfoFrame = new DateInfoFrame(this);
 		
 		addWindowListener(new WindowAdapter() {
 			@Override
@@ -83,6 +77,32 @@ public class DietDiaryMain extends JFrame{
 			}
 		}
 	}
+	
+	public boolean isLogin() {
+		return isLogin;
+	}
+	public void setLogin(boolean isLogin) {
+		this.isLogin = isLogin;
+	}
+	public DietDiaryMembers getLoginedUserInfo() {
+		return loginedUserInfo;
+	}
+	public void setLoginedUserInfo(DietDiaryMembers loginedUserInfo) {
+		this.loginedUserInfo = loginedUserInfo;
+	}
+	public ArrayList<Page> getPages() {
+		return pages;
+	}
+	public void setPages(ArrayList<Page> pages) {
+		this.pages = pages;
+	}
+	public DateInfoFrame getDateInfoFrame() {
+		return dateInfoFrame;
+	}
+	public void setDateInfoFrame(DateInfoFrame dateInfoFrame) {
+		this.dateInfoFrame = dateInfoFrame;
+	}
+	
 	
 	public static void main(String[] args) {
 		new DietDiaryMain();

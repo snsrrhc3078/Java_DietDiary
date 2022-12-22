@@ -1,22 +1,17 @@
-package com.dietdiary.client;
+package com.dietdiary.client.date;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.Graphics;
 
-import javax.swing.JComponent;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-public class Page extends JPanel{
+public class SidePage extends JPanel{
+	DateInfoFrame infoFrame;
 	
-	
-	
-	DietDiaryMain main;
-	public Page(DietDiaryMain main) {
-		this.main = main;
-		setPreferredSize(new Dimension(670, 450));
+	public SidePage(DateInfoFrame infoFrame) {
+		this.infoFrame = infoFrame;
+		setPreferredSize(new Dimension(270, 450));
 	}
 	
 	@Override
@@ -25,5 +20,4 @@ public class Page extends JPanel{
 		g.setColor(new Color(255, 255, 128));
 		g.fillRoundRect(0, 0, getWidth(), getHeight(), 50, 50);
 	}
-	
 }

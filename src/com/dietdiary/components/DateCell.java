@@ -10,28 +10,50 @@ import java.awt.event.MouseEvent;
 import javax.swing.JLabel;
 import javax.swing.border.LineBorder;
 
+import com.dietdiary.client.DietDiaryMain;
+
 public class DateCell extends MyCell{
 
 	private boolean flag;
 	private boolean isHasLog;
-	private boolean isMouseEnter;
+	private boolean isMouseOn;
+	private boolean isMouseClicked;
 	private int date;
+	DietDiaryMain main;
 	
-	public DateCell(double width, double height) {
+	public DateCell(double width, double height, DietDiaryMain main) {
 		super(width, height);
+		this.main = main;
 		addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
-				isMouseEnter=true;
+				isMouseOn=true;
 				repaint();
 			}
 			@Override
 			public void mouseExited(MouseEvent e) {
-				isMouseEnter=false;
+				isMouseOn=false;
 				repaint();
+			}
+			@Override
+			public void mousePressed(MouseEvent e) {
+				isMouseClicked = true;
+				repaint();
+			}
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				isMouseClicked=false;
+				repaint();		
+			}
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if(flag) {
+					main.getDateInfoFrame().getSelected(date);
+				}
 			}
 		});
 	}
+	
 	public int getDate() {
 		return date;
 	}
@@ -59,10 +81,18 @@ public class DateCell extends MyCell{
 			if(date==5) isHasLog=true;
 			else isHasLog = false;
 			//마우스가 올라가있으면 출력
-			if(isMouseEnter) {
+			if(isMouseOn) {
 				g.setColor(new Color(224, 184, 138));
 				g.fillRect(0, 0, getWidth(), getHeight());
 				g.setColor(Color.WHITE);
+				g.fillRoundRect(0, 0, getWidth(), getHeight(), 20, 20);
+			}
+			
+			//마우스가 눌렸으면 출력
+			if(isMouseClicked) {
+				g.setColor(new Color(224, 184, 138));
+				g.fillRect(0, 0, getWidth(), getHeight());
+				g.setColor(Color.GRAY);
 				g.fillRoundRect(0, 0, getWidth(), getHeight(), 20, 20);
 			}
 			

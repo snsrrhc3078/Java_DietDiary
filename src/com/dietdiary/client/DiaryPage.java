@@ -133,7 +133,7 @@ public class DiaryPage extends Page {
 		dates = new DateCell[6][7];
 		for(int i =0;i<dates.length;i++) {
 			for(int j = 0;j<dates[i].length;j++) {
-				dates[i][j] = new DateCell(cellWidth, cellHeight);
+				dates[i][j] = new DateCell(cellWidth, cellHeight, main);
 				diary.add(dates[i][j]);
 			}
 		}
@@ -179,5 +179,9 @@ public class DiaryPage extends Page {
 			}
 		}
 		diary.updateUI();
+	}
+	
+	public Calendar getCurrentTime() {
+		return currentTime;
 	}
 }
