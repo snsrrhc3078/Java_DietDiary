@@ -2,10 +2,16 @@ package com.dietdiary.client.date;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.util.Calendar;
 
 import javax.swing.JLabel;
+import javax.swing.border.LineBorder;
+
+import com.dietdiary.components.MyButton;
+import com.dietdiary.components.MyFormWrapper;
+import com.dietdiary.components.MyLabel;
 
 public class HistorySidePage extends SidePage{
 
@@ -13,14 +19,37 @@ public class HistorySidePage extends SidePage{
 	int month;
 	int date;
 	
-	JLabel lbTime;
+	MyFormWrapper historyInfo;
+	MyLabel lbTime, lbTotalCal, lbTotalNutritions;
+	
+	MyFormWrapper foodHistory;
+	MyButton btReg;
+	
 	
 	public HistorySidePage(DateInfoFrame infoFrame) {
 		super(infoFrame);
 		
-		lbTime = new JLabel();
-		lbTime.setFont(new Font(lbTime.getFont().getName(), Font.BOLD, 20));
-		add(lbTime);
+		lbTime = new MyLabel("YYYY년 MM월 DD일 식단", 15);
+		lbTotalCal = new MyLabel("섭취한 칼로리: " + 0 + "kcals", 15);
+		lbTotalNutritions = new MyLabel("탄수 :"+ 0 + "g 단백질 :" +0+"g 지방 :"+0 + "g" , 15);
+		
+		historyInfo = new MyFormWrapper(this, 9/10.0, 2/10.0);
+		foodHistory = new MyFormWrapper(this, 9/10.0, 7.5/10.0);
+		
+		btReg = new MyButton("Add Food");
+		
+		
+		historyInfo.setLayout(new FlowLayout());
+		foodHistory.setLayout(new FlowLayout());
+		
+		historyInfo.add(lbTime);
+		historyInfo.add(lbTotalCal);
+		historyInfo.add(lbTotalNutritions);
+		
+		foodHistory.add(btReg);
+		
+		add(historyInfo);
+		add(foodHistory);
 	}
 	public void setTimeLabel(Calendar cal) {
 		year = cal.get(Calendar.YEAR);
