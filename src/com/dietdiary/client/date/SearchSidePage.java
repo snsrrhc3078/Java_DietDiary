@@ -194,6 +194,9 @@ public class SearchSidePage extends SidePage{
 	public PagingManager getPagingManager() {
 		return pagingManager;
 	}
+	public MyLabel getLbTitle() {
+		return lbTitle;
+	}
 	
 	
 }

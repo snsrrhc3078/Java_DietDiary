@@ -59,4 +59,11 @@ public class DateInfoFrame extends JFrame{
 			}
 		}
 	}
+	
+	public ArrayList<SidePage> getSidePages() {
+		return sidePages;
+	}
+	public Calendar getSelectedTime() {
+		return selectedTime;
+	}
 }

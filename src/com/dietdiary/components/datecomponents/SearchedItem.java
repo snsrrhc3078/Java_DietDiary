@@ -14,6 +14,7 @@ import javax.swing.JPanel;
 import org.json.simple.JSONObject;
 
 import com.dietdiary.client.date.DateInfoFrame;
+import com.dietdiary.client.date.DetailSidePage;
 import com.dietdiary.client.date.SearchSidePage;
 
 public class SearchedItem extends Item{
@@ -38,6 +39,8 @@ public class SearchedItem extends Item{
 			}
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				DetailSidePage page = (DetailSidePage)searchSidePage.getInfoFrame().getSidePages().get(DateInfoFrame.DETAIL_SIDE_PAGE);
+				page.getDetail(item);
 				searchSidePage.getInfoFrame().showHide(DateInfoFrame.DETAIL_SIDE_PAGE);
 			}
 		});
