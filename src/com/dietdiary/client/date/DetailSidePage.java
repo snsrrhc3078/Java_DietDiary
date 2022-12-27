@@ -122,7 +122,7 @@ public class DetailSidePage extends SidePage{
 		btBack.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				infoFrame.showHide(DateInfoFrame.HISTORY_SIDE_PAGE);
+				infoFrame.showHide(DateInfoFrame.SEARCH_SIDE_PAGE);
 				clearPage();
 			}
 		});
