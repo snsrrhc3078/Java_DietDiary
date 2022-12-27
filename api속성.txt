@@ -1,0 +1,24 @@
+
+
+
+
+이름 
+DESC_KOR
+
+1회 제공량
+SERVING_WT
+
+열량
+NUTR_CONT1
+
+탄수
+NUTR_CONT2
+
+단백질
+NUTR_CONT3
+
+지방
+NUTR_CONT4
+
+연도
+BGN_YEAR

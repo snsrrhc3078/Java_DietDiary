@@ -13,6 +13,9 @@ public class SidePage extends JPanel{
 		this.infoFrame = infoFrame;
 		setPreferredSize(new Dimension(270, 450));
 	}
+	public DateInfoFrame getInfoFrame() {
+		return infoFrame;
+	}
 	
 	@Override
 	protected void paintComponent(Graphics g) {

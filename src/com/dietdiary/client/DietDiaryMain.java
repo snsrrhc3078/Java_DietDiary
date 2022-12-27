@@ -27,8 +27,8 @@ public class DietDiaryMain extends JFrame{
 	private boolean isLogin = false;
 	private DietDiaryMembers loginedUserInfo;
 	
-	
-	
+	private String requestURL = "http://apis.data.go.kr/1471000/FoodNtrIrdntInfoService1/getFoodNtrItdntList1";
+	private String serviceKey = "BjqQYzHtLjlq2NcHvzh%2BC1B%2FhWHIPERqruRu2rOMsG0bFYCyHaeFqy%2BKcHPHEPanneBg0nBjmqKSs82VGw7s%2BQ%3D%3D";
 
 	public static final int LOGIN_PAGE = 0;
 	public static final int SIGN_UP_PAGE = 1;
@@ -101,6 +101,12 @@ public class DietDiaryMain extends JFrame{
 	}
 	public void setDateInfoFrame(DateInfoFrame dateInfoFrame) {
 		this.dateInfoFrame = dateInfoFrame;
+	}
+	public String getRequestURL() {
+		return requestURL;
+	}
+	public String getServiceKey() {
+		return serviceKey;
 	}
 	
 	

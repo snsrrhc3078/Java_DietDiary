@@ -17,6 +17,7 @@ public class DateInfoFrame extends JFrame{
 	ArrayList<SidePage> sidePages = new ArrayList<>();
 	public static final int HISTORY_SIDE_PAGE = 0;
 	public static final int SEARCH_SIDE_PAGE = 1;
+	public static final int DETAIL_SIDE_PAGE = 2;
 	
 	public DateInfoFrame(DietDiaryMain main) {
 		this.main = main;
@@ -28,6 +29,7 @@ public class DateInfoFrame extends JFrame{
 	public void createSidePages() {
 		sidePages.add(new HistorySidePage(this));
 		sidePages.add(new SearchSidePage(this));
+		sidePages.add(new DetailSidePage(this));
 		
 		for(int i =0;i<sidePages.size();i++) {
 			add(sidePages.get(i));

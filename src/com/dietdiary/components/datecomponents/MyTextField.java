@@ -15,11 +15,5 @@ public class MyTextField extends JTextField{
 		arcSize = 25;
 		setFont(new Font(getFont().getFontName(), Font.PLAIN, 15));
 		setBorder(null);
-//		addKeyListener(new KeyAdapter() {
-//			@Override
-//			public void keyTyped(KeyEvent e) {
-//				System.out.println(getText());
-//			}
-//		});
 	}
 }
