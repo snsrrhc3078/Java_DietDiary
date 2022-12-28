@@ -48,8 +48,10 @@ public class PagingManager {
 		}
 	}
 	public void setCurrentItemSize() {
-		int size = totalCount-(pageSize * currentPage + ((pageSize-1) * blockSize * currentBlock));
+		int size = totalCount-(pageSize * currentPage + ((pageSize) * blockSize * currentBlock-1))+pageSize-1;
 		// 101-(10 * 1 + (9 * 10 * 1);
+		if(size<0) size = 0;
+		
 		if(size>pageSize) {
 			currentItemSize = pageSize;
 		}else {
@@ -69,6 +71,28 @@ public class PagingManager {
 		setCurrentItemSize();
 		setCurrentPageSize();
 	}
+	public void printFieldValues() {
+		System.out.println("totalCount : " + totalCount);
+		System.out.println("pageSize : " + pageSize);
+		System.out.println("maxPage : " + maxPage);
+		System.out.println("maxBlock : " + maxBlock);
+		System.out.println("blockSize : " + blockSize);
+		System.out.println("currentBlock : " + currentBlock);
+		System.out.println("currentPage : " + currentPage);
+		System.out.println("currentItemSize : " + currentItemSize);
+		System.out.println("currentPageSize : " + currentPageSize);
+	}
+	public int getCurrentBlockByPage() {
+		return currentBlock * blockSize;
+	}
+	public int getCurrentPageByItem() {
+		return (currentPage-1) * pageSize;
+	}
+	public int getCurrentBlockAndPageByItem() {
+		int pageByItem = getCurrentPageByItem();
+		int blockByItem = getCurrentBlockByPage() * pageSize;
+		return pageByItem + blockByItem;
+	}
 	
 	
 
@@ -87,6 +111,9 @@ public class PagingManager {
 	}
 	public int getCurrentBlock() {
 		return currentBlock;
+	}
+	public void setCurrentBlock(int currentBlock) {
+		this.currentBlock = currentBlock;
 	}
 	public int getCurrentPage() {
 		return currentPage;
@@ -119,15 +146,16 @@ public class PagingManager {
 	
 	
 //	public static void main(String[] args) {
-//		PagingManager p = new PagingManager(55);
-//		System.out.println(p.getCurrentPage());
-//		System.out.println(p.getCurrentBlock());
-//		System.out.println(p.getCurrentItemSize());
-//		System.out.println(p.getCurrentPageSize());
-//		
+//		PagingManager p = new PagingManager(53);
+//		p.setPageSize(5);
+//		p.init(42);
+//		p.moveBlockNext();
+//		p.setCurrentPage(9);
+//		p.printFieldValues();
+		
 //		System.out.println("----");
 //		
-//		p.setCurrentPage(5);
+//		p.setCurrentPage(1);
 //		System.out.println(p.getCurrentPage());
 //		System.out.println(p.getCurrentBlock());
 //		System.out.println(p.getCurrentItemSize());
