@@ -31,7 +31,7 @@ public class HistoryDAO {
 			 	3 int MONTH
 			 	4 int DAY
 			 */
-			pst.setInt(1, history.getDietDiaryMembers().getDiet_diary_idx());
+			pst.setInt(1, history.getDietDiaryMembers().getDiet_diary_members_idx());
 			pst.setInt(2, history.getYear());
 			pst.setInt(3, history.getMonth());
 			pst.setInt(4, history.getDay());
@@ -41,7 +41,7 @@ public class HistoryDAO {
 				result = new History();
 				
 				DietDiaryMembers diaryMembers = new DietDiaryMembers();
-				diaryMembers.setDiet_diary_idx(rs.getInt("DIET_DIARY_MEMBERS_IDX"));
+				diaryMembers.setDiet_diary_members_idx(rs.getInt("DIET_DIARY_MEMBERS_IDX"));
 				
 				result.setHistory_idx(rs.getInt("HISTORY_IDX"));
 				result.setDietDiaryMembers(diaryMembers);
@@ -74,7 +74,7 @@ public class HistoryDAO {
 		 	3 int MONTH, 
 		 	4 int DAY
 		 */
-		pst.setInt(1, history.getDietDiaryMembers().getDiet_diary_idx());
+		pst.setInt(1, history.getDietDiaryMembers().getDiet_diary_members_idx());
 		pst.setInt(2, history.getYear());
 		pst.setInt(3, history.getMonth());
 		pst.setInt(4, history.getDay());

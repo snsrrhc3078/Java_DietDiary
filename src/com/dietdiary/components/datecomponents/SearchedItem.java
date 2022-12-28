@@ -19,7 +19,7 @@ import com.dietdiary.client.date.SearchSidePage;
 
 public class SearchedItem extends Item{
 	JSONObject item;
-	boolean isMouseOn;
+	
 	SearchSidePage searchSidePage;
 	public SearchedItem(JComponent comp, JSONObject item, SearchSidePage searchSidePage) {
 		super(comp, 9/10.0, 1/12.0);
@@ -27,16 +27,6 @@ public class SearchedItem extends Item{
 		this.searchSidePage = searchSidePage;
 		
 		addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				isMouseOn=true;
-				repaint();
-			}
-			@Override
-			public void mouseExited(MouseEvent e) {
-				isMouseOn=false;
-				repaint();
-			}
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				DetailSidePage page = (DetailSidePage)searchSidePage.getInfoFrame().getSidePages().get(DateInfoFrame.DETAIL_SIDE_PAGE);
@@ -49,11 +39,6 @@ public class SearchedItem extends Item{
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		
-		if(isMouseOn) {
-			g.setColor(Color.WHITE);
-			g.fillRoundRect(0, 0, getWidth(), getHeight(), arcSize, arcSize);
-		}
 		
 		g.setColor(Color.BLACK);
 		g.setFont(new Font(g.getFont().getFontName(), Font.BOLD, 11));

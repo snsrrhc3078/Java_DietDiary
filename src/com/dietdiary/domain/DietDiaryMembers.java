@@ -2,18 +2,18 @@ package com.dietdiary.domain;
 
 //DiatDiaryMembers 테이블의 DTO
 public class DietDiaryMembers {
-	private int diet_diary_idx;
+	private int diet_diary_members_idx;
 	private String id;
 	private String pass;
 	private String name;
 	private String regdate;
 	private int question;
 	private String answer;
-	public int getDiet_diary_idx() {
-		return diet_diary_idx;
+	public int getDiet_diary_members_idx() {
+		return diet_diary_members_idx;
 	}
-	public void setDiet_diary_idx(int diet_diary_idx) {
-		this.diet_diary_idx = diet_diary_idx;
+	public void setDiet_diary_members_idx(int diet_diary_members_idx) {
+		this.diet_diary_members_idx = diet_diary_members_idx;
 	}
 	public String getId() {
 		return id;
@@ -51,4 +51,5 @@ public class DietDiaryMembers {
 	public void setAnswer(String answer) {
 		this.answer = answer;
 	}
+	
 }

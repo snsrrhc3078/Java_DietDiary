@@ -4,34 +4,20 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.List;
 
 import javax.swing.JLabel;
 
 import com.dietdiary.client.date.SearchSidePage;
 
 public class NumPage extends JLabel{
-	String label;
-	SearchSidePage searchSidePage;
-	int index;
+	int pageNo;
 	boolean isSelected;
-	public NumPage(String label, SearchSidePage searchSidePage, int index) {
-		super(label);
+	public NumPage(int pageNo) {
+		super(Integer.toString(pageNo));
 		setFont(new Font(getFont().getFontName(), getFont().getStyle(), 12));
-		this.label = label;
-		this.searchSidePage = searchSidePage;
-		this.index = index;
+		this.pageNo = pageNo;
 		addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				
-				Thread thread = new Thread() {
-					@Override
-					public void run() {
-						init();
-					}
-				};
-				thread.start();
-			}
 			@Override
 			public void mouseEntered(MouseEvent e) {
 				setForeground(Color.WHITE);
@@ -45,16 +31,21 @@ public class NumPage extends JLabel{
 		});
 	}
 	
-	public void init() {
-		searchSidePage.setRequestProperties(searchSidePage.gettSearch().getText(), index);
-		searchSidePage.getItemListFromJSON();
-		searchSidePage.createItemList();
-		searchSidePage.createNumPages();
-		searchSidePage.showSelectedNumPage(index);
+
+	public static void showSelectedNumPage(int index, List<NumPage> numPageList) {
+		for(int i =0;i<numPageList.size();i++) {
+			if(numPageList.get(i).getPageNo()==index) {
+				numPageList.get(i).setForeground(Color.WHITE);
+				numPageList.get(i).setSelected(true);
+			}else {
+				numPageList.get(i).setForeground(Color.BLACK);
+				numPageList.get(i).setSelected(false);
+			}
+		}
 	}
 	
-	public int getIndex() {
-		return index;
+	public int getPageNo() {
+		return pageNo;
 	}
 	public void setSelected(boolean isSelected) {
 		this.isSelected = isSelected;

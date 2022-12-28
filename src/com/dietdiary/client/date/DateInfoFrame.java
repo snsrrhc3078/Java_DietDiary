@@ -53,7 +53,7 @@ public class DateInfoFrame extends JFrame{
 
 		HistorySidePage page = (HistorySidePage)sidePages.get(HISTORY_SIDE_PAGE);
 		page.setTimeLabel(selectedTime);
-		
+		page.init();
 		
 		showHide(HISTORY_SIDE_PAGE);
 		setVisible(true);

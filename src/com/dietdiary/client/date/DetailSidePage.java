@@ -215,7 +215,7 @@ public class DetailSidePage extends SidePage{
 		Calendar selectedTime = infoFrame.getSelectedTime();
 		
 		DietDiaryMembers dietDiaryMembers = new DietDiaryMembers();
-		dietDiaryMembers.setDiet_diary_idx(infoFrame.main.getLoginedUserInfo().getDiet_diary_idx());
+		dietDiaryMembers.setDiet_diary_members_idx(infoFrame.main.getLoginedUserInfo().getDiet_diary_members_idx());
 		
 		History history = new History(); //외래키를 위해 생성
 		history.setDietDiaryMembers(dietDiaryMembers);

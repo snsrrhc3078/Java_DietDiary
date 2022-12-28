@@ -52,7 +52,7 @@ public class FoodDAO {
 		List<Food> list = new ArrayList<>();
 		StringBuilder sql = new StringBuilder();
 		sql.append("SELECT * FROM FOOD");
-		sql.append(" WHERE HISTORY_IDX=?");
+		sql.append(" WHERE HISTORY_IDX=? ORDER BY FOOD_IDX ASC");
 		PreparedStatement pst = null;
 		ResultSet rs = null;
 		try {

@@ -42,6 +42,7 @@ public class SearchSidePage extends SidePage{
 	
 	MyFormWrapper pageForm;
 	ArrayList<NumPage> numPageList = new ArrayList<>();
+	NumPageArrow lbPrev, lbNext;
 	
 	MyFormWrapper backButtonForm;
 	MySideButton btBack;
@@ -72,6 +73,9 @@ public class SearchSidePage extends SidePage{
 		f.setVgap(2);
 		f.setHgap(2);
 		pageForm.setLayout(f);
+		lbPrev = new NumPageArrow("◀", NumPageArrow.PREV);
+		lbNext = new NumPageArrow("▶", NumPageArrow.NEXT);
+		
 		
 		btBack = new MySideButton("Back");
 		backButtonForm.add(btBack);
@@ -101,6 +105,36 @@ public class SearchSidePage extends SidePage{
 				clearPage();
 			}
 		});
+		
+		lbPrev.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				pagingManager.moveBlockPrev();
+				
+				Thread thread = new Thread() {
+					@Override
+					public void run() {
+						blockMoveInit();
+					}
+				};
+				thread.start();
+			}
+		});
+		
+		lbNext.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				pagingManager.moveBlockNext();
+				
+				Thread thread = new Thread() {
+					@Override
+					public void run() {
+						blockMoveInit();
+					}
+				};
+				thread.start();
+			}
+		});
 			
 	}
 	public void init() {
@@ -109,14 +143,21 @@ public class SearchSidePage extends SidePage{
 		pagingManager.init((int)totalCount);
 		createItemList();
 		createNumPages();
-		showSelectedNumPage(numPageList.get(0).getIndex());
+		NumPage.showSelectedNumPage(1, numPageList);
 	}
 	public void blockMoveInit() {
 		setRequestProperties(tSearch.getText(), 1 + (pagingManager.getCurrentBlock() * pagingManager.getBlockSize()));
 		getItemListFromJSON();
 		createItemList();
 		createNumPages();
-		showSelectedNumPage(numPageList.get(0).getIndex());
+		NumPage.showSelectedNumPage(1, numPageList);
+	}
+	public void numPageInit(int pageNo) {
+		setRequestProperties(tSearch.getText(), pageNo);
+		getItemListFromJSON();
+		createItemList();
+		createNumPages();
+		NumPage.showSelectedNumPage(pageNo, numPageList);
 	}
 	
 	//컴포넌트 생성
@@ -124,17 +165,27 @@ public class SearchSidePage extends SidePage{
 		pageForm.removeAll();
 		numPageList.removeAll(numPageList);
 		
-		NumPageArrow lbPrev = new NumPageArrow("◀", this, NumPageArrow.PREV);
-		NumPageArrow lbNext = new NumPageArrow("▶", this, NumPageArrow.NEXT);
-		
 		int block = pagingManager.getCurrentBlock() * pagingManager.getBlockSize();
 		int page = pagingManager.getCurrentPageSize();
 		
 		pageForm.add(lbPrev);
 		for(int i =1 + block;i<=block + page;i++) {
-			NumPage np = new NumPage(Integer.toString(i), this, i);
+			NumPage np = new NumPage(i);
 			pageForm.add(np);
 			numPageList.add(np);
+			
+			np.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					Thread thread = new Thread() {
+						@Override
+						public void run() {
+							numPageInit(np.getPageNo());
+						}
+					};
+					thread.start();
+				}
+			});
 		}
 		pageForm.add(lbNext);
 		pageForm.updateUI();
@@ -168,17 +219,6 @@ public class SearchSidePage extends SidePage{
 		 }
 	}
 	//기타 메서드
-	public void showSelectedNumPage(int index) {
-		for(int i =0;i<numPageList.size();i++) {
-			if(numPageList.get(i).getIndex()==index) {
-				numPageList.get(i).setForeground(Color.WHITE);
-				numPageList.get(i).setSelected(true);
-			}else {
-				numPageList.get(i).setForeground(Color.BLACK);
-				numPageList.get(i).setSelected(false);
-			}
-		}
-	}
 	public void clearPage() {
 		tSearch.setText("");
 		itemInfoList.removeAll(itemInfoList);
@@ -193,9 +233,7 @@ public class SearchSidePage extends SidePage{
 	public MyTextField gettSearch() {
 		return tSearch;
 	}
-	public PagingManager getPagingManager() {
-		return pagingManager;
-	}
+
 	public MyLabel getLbTitle() {
 		return lbTitle;
 	}

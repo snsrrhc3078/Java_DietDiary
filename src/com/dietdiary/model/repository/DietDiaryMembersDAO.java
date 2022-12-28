@@ -46,7 +46,7 @@ public class DietDiaryMembersDAO {
 			
 			if(rs.next()) {
 				result = new DietDiaryMembers();
-				result.setDiet_diary_idx(rs.getInt("DIET_DIARY_MEMBERS_IDX"));
+				result.setDiet_diary_members_idx(rs.getInt("DIET_DIARY_MEMBERS_IDX"));
 				result.setId(rs.getString("ID"));
 				result.setPass(rs.getString("PASS"));
 				result.setName(rs.getString("NAME"));
