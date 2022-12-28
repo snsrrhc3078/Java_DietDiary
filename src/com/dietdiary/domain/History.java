@@ -1,6 +1,7 @@
 package com.dietdiary.domain;
 
 public class History {
+	private int history_idx;
 	private DietDiaryMembers dietDiaryMembers;
 	private int year;
 	private int month;
@@ -9,7 +10,12 @@ public class History {
 	private int total_carbs;
 	private int total_proteins;
 	private int total_fats;
-	
+	public int getHistory_idx() {
+		return history_idx;
+	}
+	public void setHistory_idx(int history_idx) {
+		this.history_idx = history_idx;
+	}
 	public DietDiaryMembers getDietDiaryMembers() {
 		return dietDiaryMembers;
 	}

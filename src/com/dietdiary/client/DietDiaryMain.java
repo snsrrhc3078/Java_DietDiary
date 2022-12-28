@@ -20,6 +20,7 @@ public class DietDiaryMain extends JFrame{
 	DateInfoFrame dateInfoFrame;
 	
 	
+	DBManager dbManager = DBManager.getInstance();
 	DietDiaryMembersDAO membersDAO = new DietDiaryMembersDAO();
 	
 	
@@ -52,7 +53,6 @@ public class DietDiaryMain extends JFrame{
 		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
-				DBManager dbManager = DBManager.getInstance();
 				dbManager.release(dbManager.getConnection());
 				System.exit(0);
 			}
@@ -107,6 +107,9 @@ public class DietDiaryMain extends JFrame{
 	}
 	public String getServiceKey() {
 		return serviceKey;
+	}
+	public DBManager getDbManager() {
+		return dbManager;
 	}
 	
 	

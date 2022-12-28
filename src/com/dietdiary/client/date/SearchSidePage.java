@@ -161,9 +161,11 @@ public class SearchSidePage extends SidePage{
 	}
 	public void getItemListFromJSON() {
 		 JSONObject json = JSONManager.parse(requester.request());
-		 JSONObject body = (JSONObject)json.get("body");
-		 totalCount = (Long)body.get("totalCount");
-		 itemInfoList = JSONManager.getJSONArrayToList(body.get("items"));
+		 if(json != null) {
+			 JSONObject body = (JSONObject)json.get("body");
+			 totalCount = (Long)body.get("totalCount");
+			 itemInfoList = JSONManager.getJSONArrayToList(body.get("items"));
+		 }
 	}
 	//기타 메서드
 	public void showSelectedNumPage(int index) {

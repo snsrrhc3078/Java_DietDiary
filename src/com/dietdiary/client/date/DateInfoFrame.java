@@ -9,6 +9,8 @@ import javax.swing.JFrame;
 
 import com.dietdiary.client.DiaryPage;
 import com.dietdiary.client.DietDiaryMain;
+import com.dietdiary.model.repository.FoodDAO;
+import com.dietdiary.model.repository.HistoryDAO;
 
 public class DateInfoFrame extends JFrame{
 	DietDiaryMain main;
@@ -18,6 +20,9 @@ public class DateInfoFrame extends JFrame{
 	public static final int HISTORY_SIDE_PAGE = 0;
 	public static final int SEARCH_SIDE_PAGE = 1;
 	public static final int DETAIL_SIDE_PAGE = 2;
+	
+	FoodDAO foodDAO = new FoodDAO();
+	HistoryDAO historyDAO = new HistoryDAO();
 	
 	public DateInfoFrame(DietDiaryMain main) {
 		this.main = main;
@@ -37,6 +42,9 @@ public class DateInfoFrame extends JFrame{
 	}
 	
 	public void getSelected(int date) {
+		//페이지들 초기화
+		clearAllPages();
+		
 		DiaryPage diaryPage = (DiaryPage)main.getPages().get(DietDiaryMain.DIARY_PAGE);
 		selectedTime = Calendar.getInstance();
 		int year = diaryPage.getCurrentTime().get(Calendar.YEAR);
@@ -45,6 +53,7 @@ public class DateInfoFrame extends JFrame{
 
 		HistorySidePage page = (HistorySidePage)sidePages.get(HISTORY_SIDE_PAGE);
 		page.setTimeLabel(selectedTime);
+		
 		
 		showHide(HISTORY_SIDE_PAGE);
 		setVisible(true);
@@ -59,11 +68,22 @@ public class DateInfoFrame extends JFrame{
 			}
 		}
 	}
+	public void clearAllPages() {
+		//히스토리 페이지 초기화 해야함
+		((SearchSidePage)sidePages.get(SEARCH_SIDE_PAGE)).clearPage();
+		((DetailSidePage)sidePages.get(DETAIL_SIDE_PAGE)).clearPage();
+	}
 	
 	public ArrayList<SidePage> getSidePages() {
 		return sidePages;
 	}
 	public Calendar getSelectedTime() {
 		return selectedTime;
+	}
+	public FoodDAO getFoodDAO() {
+		return foodDAO;
+	}
+	public HistoryDAO getHistoryDAO() {
+		return historyDAO;
 	}
 }
