@@ -84,6 +84,42 @@ public class FoodDAO {
 		}
 		return list;
 	}
+	public List<Food> selectAllByFKForUpdate(int history_idx){
+		List<Food> list = new ArrayList<>();
+		StringBuilder sql = new StringBuilder();
+		sql.append("SELECT * FROM FOOD");
+		sql.append(" WHERE HISTORY_IDX=? ORDER BY FOOD_IDX ASC FOR UPDATE WAIT 5");
+		PreparedStatement pst = null;
+		ResultSet rs = null;
+		try {
+			pst = dbManager.getConnection().prepareStatement(sql.toString());
+			pst.setInt(1, history_idx);
+			rs = pst.executeQuery();
+			while(rs.next()) {
+				History history = new History();
+				history.setHistory_idx(rs.getInt("HISTORY_IDX"));
+				
+				Food food = new Food();
+				food.setFood_idx(rs.getInt("FOOD_IDX"));
+				food.setHistory(history);
+				food.setName(rs.getString("NAME"));
+				food.setBrand(rs.getString("BRAND"));
+				food.setCalories(rs.getInt("CALORIES"));
+				food.setCarbs(rs.getInt("CARBS"));
+				food.setProteins(rs.getInt("PROTEINS"));
+				food.setFats(rs.getInt("FATS"));
+				food.setRegyear(rs.getString("REGYEAR"));
+				food.setServeSize(rs.getString("SERVESIZE"));
+				food.setQuantity(rs.getDouble("QUANTITY"));
+				list.add(food);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			dbManager.release(pst, rs);
+		}
+		return list;
+	}
 	public Food selectByPKForUpdate(int food_idx) {
 		Food food = null;
 		String sql = "SELECT * FROM FOOD WHERE FOOD_IDX=? FOR UPDATE WAIT 5";

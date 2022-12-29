@@ -61,11 +61,11 @@ public class HistorySidePage extends SidePage{
 	
 	}
 	public void createHistoryInfoForm() {
-		historyInfoForm = new MyFormWrapper(this, 9/10.0, 2/10.0);
+		historyInfoForm = new MyFormWrapper(this, 9/10.0, 1.9/10.0);
 		
-		lbTime = new MyLabel("YYYY년 MM월 DD일 식단", 15);
-		lbTotalCal = new MyLabel("섭취한 칼로리: " + 0 + "kcals", 15);
-		lbTotalNutritions = new MyLabel("탄수 :"+ 0 + "g 단백질 :" +0+"g 지방 :"+0 + "g" , 15);
+		lbTime = new MyLabel("YYYY년 MM월 DD일 식단", 14);
+		lbTotalCal = new MyLabel("섭취한 칼로리: NNNNkcals", 14);
+		lbTotalNutritions = new MyLabel("탄수 :NNg 단백질 :NNg 지방 :NNg" , 13);
 		
 		historyInfoForm.setLayout(new FlowLayout());
 		
@@ -154,6 +154,8 @@ public class HistorySidePage extends SidePage{
 		createItemList();
 		createNumPages();
 		NumPage.showSelectedNumPage(1, numPageList);
+		getTotalInfo();
+		setTotalLabel();
 	}
 
 	public void init(int pageNo) {
@@ -230,6 +232,66 @@ public class HistorySidePage extends SidePage{
 	public void clearPage() {
 		init();
 	}
+	public void getTotalInfo() {
+		FoodDAO foodDAO = infoFrame.getFoodDAO();
+		
+		if(history!=null) {
+			//현재 history에 해당하는 food들 가져오기
+			List<Food> list = foodDAO.selectAllByFKForUpdate(history.getHistory_idx());
+
+			//history의 total 값들 초기화
+			setHistoryTotalInfo(list);
+
+			//food가 존재한다면 total 정보를 update, 없다면 delete함
+			if(list.size()>0) {
+				updateHistory();
+			}else {
+				deleteHistory();
+			}
+		}
+	}
+	
+	/**
+	 * 
+	 * @param list list에 들어있는 food의 값들을 모두 합쳐서 history에 초기화하는 함수. list의 크기가 0이라면 0으로 초기화
+	 */
+	public void setHistoryTotalInfo(List<Food> list) {
+		int totalCalories = 0;
+		int totalCarbs=0;
+		int totalProteins=0;
+		int totalFats=0;
+		
+		for(int i =0;i<list.size();i++) {
+			Food food = list.get(i);
+			totalCalories += (int)(food.getCalories() * food.getQuantity());
+			totalCarbs += (int)(food.getCarbs() * food.getQuantity());
+			totalProteins += (int)(food.getProteins() * food.getQuantity());
+			totalFats += (int)(food.getFats() * food.getQuantity());
+		}
+		
+		history.setTotal_calories(totalCalories);
+		history.setTotal_carbs(totalCarbs);
+		history.setTotal_proteins(totalProteins);
+		history.setTotal_fats(totalFats);
+	}
+	public void setTotalLabel() {
+		int totalCal = 0;
+		int totalCarb = 0;
+		int totalPro = 0;
+		int totalFat = 0;
+		
+		if(history!=null) {
+			totalCal = history.getTotal_calories();
+			totalCarb = history.getTotal_carbs();
+			totalPro =  history.getTotal_proteins();
+			totalFat =  history.getTotal_fats();
+		}
+		
+		lbTotalCal.setText("섭취한 칼로리: " + totalCal + "kcals");
+		lbTotalNutritions.setText("탄수 :" + totalCarb + "g 단백질 :" + totalPro + "g 지방 :" + totalFat + "g");
+	}
+	
+	//DAO 처리
 	
 	/**
 	 * 
@@ -260,7 +322,14 @@ public class HistorySidePage extends SidePage{
 		}else {
 			throw new SQLException();
 		}
-		
-		
+	}
+	
+	public void updateHistory() {
+		HistoryDAO historyDAO = infoFrame.getHistoryDAO();
+		historyDAO.update(history);
+	}
+	public void deleteHistory() {
+		HistoryDAO historyDAO = infoFrame.getHistoryDAO();
+		historyDAO.delete(history);
 	}
 }

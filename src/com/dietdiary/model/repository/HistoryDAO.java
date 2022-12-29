@@ -13,8 +13,8 @@ public class HistoryDAO {
 	DBManager dbManager = DBManager.getInstance();
 	
 	/**
-	 * 
-	 * @param history 탐색할 primary key 를 가지고 있는 객체 DIET_DIARY_MEMBERS_IDX, YEAR, MONTH, DAY는 반드시 값이 존재햐아 함
+	 * selectByFKAndDates 메서드에서 동시성 문제를 해결하기 위해 for update구문을 추가한 메서드
+	 * @param history 레코드를 탐색하기 위해 primary key와 1:1 대응되는 컬럼들을 가지고 있는 객체. DIET_DIARY_MEMBERS_IDX, YEAR, MONTH, DAY는 반드시 값이 존재햐아 함
 	 * @return 값이 존재할경우 해당하는 History 객체 반환, 존재하지 않을경우 null
 	 */
 	public History selectByFKAndDatesForUpdate(History history) {
@@ -62,7 +62,7 @@ public class HistoryDAO {
 	}
 	/**
 	 * 
-	 * @param history 탐색할 primary key 를 가지고 있는 객체 DIET_DIARY_MEMBERS_IDX, YEAR, MONTH, DAY는 반드시 값이 존재햐아 함
+	 * @param history 레코드를 탐색하기 위해 primary key와 1:1 대응되는 컬럼들을 가지고 있는 객체 DIET_DIARY_MEMBERS_IDX, YEAR, MONTH, DAY는 반드시 값이 존재햐아 함
 	 * @return 값이 존재할경우 해당하는 History 객체 반환, 존재하지 않을경우 null
 	 */
 	public History selectByFKAndDates(History history) {
@@ -131,4 +131,60 @@ public class HistoryDAO {
 		
 		return result;
 	}
+	
+	/**
+	 * 
+	 * @param history 레코드를 update하기 위해 탐색할 기준인 history_idx와 total_calories, total_carbs, total_proteins, total_fats값을 가진 DTO
+	 * @return 쿼리 실행에 성공 했다면 1 이상의 정수, 실패했다면 정수 0을 반환
+	 */
+	public int update(History history) {
+		int result = 0;
+		StringBuilder sql = new StringBuilder();
+		sql.append("UPDATE HISTORY SET TOTAL_CALORIES=?, TOTAL_CARBS=?, TOTAL_PROTEINS=?, TOTAL_FATS=?");
+		sql.append(" WHERE HISTORY_IDX=?");
+		PreparedStatement pst = null;
+		try {
+			pst = dbManager.getConnection().prepareStatement(sql.toString());
+			/*
+			 	1 int HISTORY SET TOTAL_CALORIES, 
+			 	2 int TOTAL_CARBS, 
+			 	3 int TOTAL_PROTEINS, 
+			 	4 int TOTAL_FATS,
+			 	5 int HISTORY_IDX	
+			 */
+			pst.setInt(1, history.getTotal_calories());
+			pst.setInt(2, history.getTotal_carbs());
+			pst.setInt(3, history.getTotal_proteins());
+			pst.setInt(4, history.getTotal_fats());
+			pst.setInt(5, history.getHistory_idx());
+			
+			result = pst.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			dbManager.release(pst);
+		}
+		return result;
+	}
+	/**
+	 * 
+	 * @param history 레코드를 delete하기 위해 탐색할 기준인 history_idx를 가진 DTO
+	 * @return 쿼리 실행에 성공 했다면 1 이상의 정수, 실패했다면 정수 0을 반환
+	 */
+	public int delete(History history) {
+		int result = 0;
+		String sql = "DELETE FROM HISTORY WHERE HISTORY_IDX=?";
+		PreparedStatement pst = null;
+		try {
+			pst = dbManager.getConnection().prepareStatement(sql);
+			pst.setInt(1, history.getHistory_idx());
+			result = pst.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			dbManager.release(pst);
+		}
+		return result;
+	}
+
 }
