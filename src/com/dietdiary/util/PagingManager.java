@@ -6,7 +6,7 @@ public class PagingManager {
 	private int pageSize = 10;
 	private int maxPage;
 	private int maxBlock;
-	private int blockSize = 10;
+	private int blockSize = 2;
 	private int currentBlock = 0;
 	private int currentPage = 1;
 	private int currentItemSize;

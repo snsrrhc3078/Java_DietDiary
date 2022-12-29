@@ -111,7 +111,7 @@ public class HistorySidePage extends SidePage{
 				Thread thread = new Thread() {
 					@Override
 					public void run() {
-						blockMoveInit();
+						init(1);
 					}
 				};
 				thread.start();
@@ -126,7 +126,7 @@ public class HistorySidePage extends SidePage{
 				Thread thread = new Thread() {
 					@Override
 					public void run() {
-						blockMoveInit();
+						init(1);
 					}
 				};
 				thread.start();
@@ -143,6 +143,10 @@ public class HistorySidePage extends SidePage{
 		lbTime.setText(year+"년 "+month+"월 "+ day+"일 식단");
 		updateUI();
 	}
+	
+	/**
+	 * 최초에 itemInfoList 받아올떄 사용하는 init
+	 */
 	public void init() {
 		getHistory();
 		getItemInfoList();
@@ -151,17 +155,12 @@ public class HistorySidePage extends SidePage{
 		createNumPages();
 		NumPage.showSelectedNumPage(1, numPageList);
 	}
-	public void blockMoveInit() {
-		pagingManager.setCurrentPage(1);
+
+	public void init(int pageNo) {
+		pagingManager.setCurrentPage(pageNo%pagingManager.getPageSize());
 		createItemList();
 		createNumPages();
-		NumPage.showSelectedNumPage(1, numPageList);
-	}
-	public void numPageInit(int pageNo) {
-		pagingManager.setCurrentPage(pageNo);
-		createItemList();
-		createNumPages();
-		NumPage.showSelectedNumPage(pageNo, numPageList);
+		NumPage.showSelectedNumPage(pagingManager.getCurrentPage() + pagingManager.getCurrentBlockByPage(), numPageList);
 	}
 	public void getHistory() {
 		HistoryDAO historyDAO = infoFrame.getHistoryDAO();
@@ -225,7 +224,7 @@ public class HistorySidePage extends SidePage{
 					Thread thread = new Thread() {
 						@Override
 						public void run() {
-							numPageInit(np.getPageNo());
+							init(np.getPageNo());
 						}
 					};
 					thread.start();

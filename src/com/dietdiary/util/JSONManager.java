@@ -9,7 +9,7 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 public class JSONManager {
-	public static JSONObject parse(String jsonString) {
+	public static synchronized JSONObject parse(String jsonString) {
 		JSONParser parser = new JSONParser();
 		JSONObject obj = null;
 		try {

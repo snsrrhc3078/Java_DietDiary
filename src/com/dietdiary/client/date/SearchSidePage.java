@@ -137,7 +137,7 @@ public class SearchSidePage extends SidePage{
 		});
 			
 	}
-	public void init() {
+	public synchronized void init() {
 		setRequestProperties(tSearch.getText(), 1);
 		getItemListFromJSON();
 		pagingManager.init((int)totalCount);
@@ -150,7 +150,7 @@ public class SearchSidePage extends SidePage{
 		getItemListFromJSON();
 		createItemList();
 		createNumPages();
-		NumPage.showSelectedNumPage(1, numPageList);
+		NumPage.showSelectedNumPage(numPageList.get(0).getPageNo(), numPageList);
 	}
 	public void numPageInit(int pageNo) {
 		setRequestProperties(tSearch.getText(), pageNo);
@@ -177,6 +177,7 @@ public class SearchSidePage extends SidePage{
 			np.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent e) {
+					
 					Thread thread = new Thread() {
 						@Override
 						public void run() {
