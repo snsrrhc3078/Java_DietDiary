@@ -33,6 +33,7 @@ public class DateInfoFrame extends JFrame{
 		this.main = main;
 		setBounds(main.getX() + main.getWidth()-10, main.getY(), 300, 500);
 		setLayout(new FlowLayout());
+		setTitle("Daily Infomation");
 		
 		createSidePages();
 	}

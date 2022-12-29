@@ -26,7 +26,7 @@ import com.dietdiary.domain.DietDiaryMembers;
 import com.dietdiary.util.StringUtil;
 
 //다이어리 로그인하는 페이지 클래스
-public class LoginPage extends Page implements ActionListener {
+public class SignInPage extends Page implements ActionListener {
 	JLabel lbTitle;
 	JPanel pFormWrapper;
 	MyInputForm pInputForm;
@@ -38,14 +38,14 @@ public class LoginPage extends Page implements ActionListener {
 
 	public static final int ID = 0;
 	public static final int PASS = 1;
-	public static final int LOG_IN = 0;
+	public static final int SIGN_IN = 0;
 	public static final int SIGN_UP = 1;
 	public static final int FORGOT_PASSWORD = 2;
 
-	public LoginPage(DietDiaryMain main) {
+	public SignInPage(DietDiaryMain main) {
 		super(main);
 
-		lbTitle = new MyTitle("Log In", this, 3);
+		lbTitle = new MyTitle("Sign In", this, 3);
 		pFormWrapper = new MyFormWrapper(this, 4 / 5.0, 0.5 * 3 / 4);
 		pInputForm = new MyInputForm();
 		pButtonForm = new MyButtonForm();
@@ -55,7 +55,7 @@ public class LoginPage extends Page implements ActionListener {
 		pInputForm.addFormPasswordField("Pass", 10, 20);
 
 		// 버튼 필드 작성
-		pButtonForm.addMyButton("Log In");
+		pButtonForm.addMyButton("Sign In");
 		pButtonForm.addMyButton("Sign Up");
 		pButtonForm.addMyButton("Forgot Password");
 
@@ -77,7 +77,9 @@ public class LoginPage extends Page implements ActionListener {
 
 	}
 
-	public void login() {
+	public void signIn() {
+		
+		if(emptyWarning()) return;
 		
 		DietDiaryMembers member = new DietDiaryMembers();
 		member.setId(fields.get(ID).getText());
@@ -89,14 +91,31 @@ public class LoginPage extends Page implements ActionListener {
 		//만약 유저가 존재한다면
 		if(member!=null) {
 			JOptionPane.showMessageDialog(main, "환영합니다 " + member.getName() + " 님!");
-			main.setLogin(true);
+			clearForm();
+			main.setSignIn(true);
 			main.setLoginedUserInfo(member);
 			DiaryPage page = (DiaryPage)main.getPages().get(DietDiaryMain.DIARY_PAGE);
-			page.init();
+			page.getSignIn();;
 			main.showHide(DietDiaryMain.DIARY_PAGE);
 		}else {
 			JOptionPane.showMessageDialog(main, "존재하거나 일치하지 않는 아이디 혹은 패스워드 입니다");
+			fields.get(PASS).setText("");
+			fields.get(PASS).grabFocus();
 		}
+	}
+	
+	public boolean emptyWarning() {
+		if(fields.get(SIGN_IN).getText().equals("")) {
+			JOptionPane.showMessageDialog(main, "아이디를 입력해주세요");
+			fields.get(SIGN_IN).grabFocus();
+			return true;
+		}else if(fields.get(PASS).getText().equals("")) {
+			JOptionPane.showMessageDialog(main, "비밀번호를 입력해주세요");
+			fields.get(PASS).grabFocus();
+			return true;
+		}
+		
+		return false;
 	}
 
 	public void clearForm() {
@@ -109,8 +128,8 @@ public class LoginPage extends Page implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		Object obj = e.getSource();
 
-		if (obj.equals(buttons.get(LOG_IN))) {
-			login();
+		if (obj.equals(buttons.get(SIGN_IN))) {
+			signIn();
 		} else if (obj.equals(buttons.get(SIGN_UP))) {
 			main.showHide(SIGN_UP);
 		} else if (obj.equals(buttons.get(FORGOT_PASSWORD))) {

@@ -37,6 +37,7 @@ public class SearchedItem extends Item{
 				page.getDetail(infoFrame.parseJSONObjectToFood(item));
 				page.setRegistButton(DetailSidePage.REGIST_BUTTON);
 				infoFrame.showHide(DateInfoFrame.DETAIL_SIDE_PAGE);
+				page.gettServe().grabFocus();
 			}
 		});
 	}

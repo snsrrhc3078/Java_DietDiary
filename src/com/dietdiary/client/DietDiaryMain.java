@@ -19,19 +19,18 @@ public class DietDiaryMain extends JFrame{
 	private ArrayList<Page> pages = new ArrayList<>();
 	DateInfoFrame dateInfoFrame;
 	
-	
 	DBManager dbManager = DBManager.getInstance();
 	DietDiaryMembersDAO membersDAO = new DietDiaryMembersDAO();
 	
 	
 	
-	private boolean isLogin = false;
+	private boolean isSignIn = false;
 	private DietDiaryMembers loginedUserInfo;
 	
 	private String requestURL = "http://apis.data.go.kr/1471000/FoodNtrIrdntInfoService1/getFoodNtrItdntList1";
 	private String serviceKey = "BjqQYzHtLjlq2NcHvzh%2BC1B%2FhWHIPERqruRu2rOMsG0bFYCyHaeFqy%2BKcHPHEPanneBg0nBjmqKSs82VGw7s%2BQ%3D%3D";
 
-	public static final int LOGIN_PAGE = 0;
+	public static final int SIGN_IN_PAGE = 0;
 	public static final int SIGN_UP_PAGE = 1;
 	public static final int DIARY_PAGE = 2;
 	
@@ -40,7 +39,7 @@ public class DietDiaryMain extends JFrame{
 		setLayout(new FlowLayout());
 		createPages();
 		
-		showHide(LOGIN_PAGE);
+		showHide(SIGN_IN_PAGE);
 		
 		setTitle("Diet Diary");
 		setSize(700, 500);
@@ -59,8 +58,8 @@ public class DietDiaryMain extends JFrame{
 		});
 	}
 	public void createPages() {
-		pages.add(new LoginPage(this));
-		pages.add(new JoinPage(this));
+		pages.add(new SignInPage(this));
+		pages.add(new SignUpPage(this));
 		pages.add(new DiaryPage(this));
 		
 		for(int i =0;i<pages.size();i++) {
@@ -78,11 +77,11 @@ public class DietDiaryMain extends JFrame{
 		}
 	}
 	
-	public boolean isLogin() {
-		return isLogin;
+	public boolean isSignIn() {
+		return isSignIn;
 	}
-	public void setLogin(boolean isLogin) {
-		this.isLogin = isLogin;
+	public void setSignIn(boolean isSignIn) {
+		this.isSignIn = isSignIn;
 	}
 	public DietDiaryMembers getLoginedUserInfo() {
 		return loginedUserInfo;

@@ -22,7 +22,7 @@ import com.dietdiary.components.MyTitle;
 import com.dietdiary.domain.DietDiaryMembers;
 import com.dietdiary.util.StringUtil;
 
-public class JoinPage extends Page implements ActionListener {
+public class SignUpPage extends Page implements ActionListener {
 	JLabel lbTitle;
 	JPanel pFormWrapper;
 	MyInputForm pInputForm;
@@ -41,7 +41,7 @@ public class JoinPage extends Page implements ActionListener {
 	public static final int SIGN_UP = 0;
 	public static final int BACK = 1;
 
-	public JoinPage(DietDiaryMain main) {
+	public SignUpPage(DietDiaryMain main) {
 		super(main);
 
 		lbTitle = new MyTitle("Sign Up", this, 3);
@@ -89,7 +89,7 @@ public class JoinPage extends Page implements ActionListener {
 		if(result > 0) {
 			JOptionPane.showMessageDialog(main, "회원가입 완료");
 			clearForm();
-			main.showHide(DietDiaryMain.LOGIN_PAGE);
+			main.showHide(DietDiaryMain.SIGN_IN_PAGE);
 		}else {
 			JOptionPane.showMessageDialog(main, "회원가입 실패");
 		}
@@ -109,7 +109,7 @@ public class JoinPage extends Page implements ActionListener {
 		if (obj.equals(buttons.get(SIGN_UP))) {
 			regist();
 		} else if (obj.equals(buttons.get(BACK))) {
-			main.showHide(DietDiaryMain.LOGIN_PAGE);
+			main.showHide(DietDiaryMain.SIGN_IN_PAGE);
 		}
 	}
 }

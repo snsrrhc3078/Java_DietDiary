@@ -20,6 +20,8 @@ public class DateCell extends MyCell{
 	private boolean isHasLog;
 	private boolean isMouseOn;
 	private boolean isMouseClicked;
+	private boolean isSat;
+	private boolean isSun;
 	private int date;
 	DietDiaryMain main;
 	History history;
@@ -68,6 +70,18 @@ public class DateCell extends MyCell{
 	}
 	public void setFlag(boolean flag) {
 		this.flag = flag;
+	}
+	public void setSat(boolean isSat) {
+		this.isSat = isSat;
+	}
+	public void setSun(boolean isSun) {
+		this.isSun = isSun;
+	}
+	public void setCurrentTime(Calendar currentTime) {
+		this.currentTime = currentTime;
+	}
+	public Calendar getCurrentTime() {
+		return currentTime;
 	}
 	public History getHistory() {
 		return history;
@@ -134,9 +148,15 @@ public class DateCell extends MyCell{
 			
 			//date 출력
 			if(isToday) {
-				g.setColor(Color.RED);
+				g.setColor(new Color(0xFF6699));
 			}else {
 				g.setColor(Color.BLACK);
+				
+				if(isSat) {
+					g.setColor(Color.BLUE);
+				}else if(isSun) {
+					g.setColor(Color.RED);
+				}
 			}
 			if(date<10) {
 				g.drawString(Integer.toString(date), getWidth()/2-3, getHeight()/3+2);

@@ -236,5 +236,4 @@ public class SearchSidePage extends SidePage{
 		return lbTitle;
 	}
 	
-	
 }

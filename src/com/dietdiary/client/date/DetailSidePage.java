@@ -364,4 +364,7 @@ public class DetailSidePage extends SidePage{
 		}
 	}
 
+	public JFormattedTextField gettServe() {
+		return tServe;
+	}
 }

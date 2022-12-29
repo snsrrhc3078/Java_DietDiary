@@ -7,14 +7,17 @@ import javax.swing.JLabel;
 import javax.swing.border.LineBorder;
 
 public class DayCell extends MyCell{
-
+	JLabel label;
 	public DayCell(double width, double height, String label) {
 		super(width, height);
-		JLabel lb = new JLabel(label);
-		lb.setFont(new Font("Verdana", Font.BOLD|Font.ITALIC, 20));
-		lb.setHorizontalAlignment(JLabel.CENTER);
+		this.label = new JLabel(label);
+		this.label.setFont(new Font("Verdana", Font.BOLD|Font.ITALIC, 20));
+		this.label.setHorizontalAlignment(JLabel.CENTER);
 		setLayout(new BorderLayout());
-		add(lb);
+		add(this.label);
 	}
 
+	public JLabel getLabel() {
+		return label;
+	}
 }

@@ -47,6 +47,7 @@ public class HistoryItem extends Item{
 				page.getDetail(food);
 				page.setRegistButton(DetailSidePage.EDIT_BUTTON);
 				infoFrame.showHide(DateInfoFrame.DETAIL_SIDE_PAGE);
+				page.gettServe().grabFocus();
 			}
 		});
 		

@@ -87,7 +87,9 @@ public class HistorySidePage extends SidePage{
 		btReg.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				SearchSidePage page = (SearchSidePage)infoFrame.getSidePages().get(DateInfoFrame.SEARCH_SIDE_PAGE);
 				infoFrame.showHide(DateInfoFrame.SEARCH_SIDE_PAGE);
+				page.gettSearch().grabFocus();
 			}
 		});
 	}
