@@ -30,7 +30,7 @@ public class SearchedItem extends Item{
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				DetailSidePage page = (DetailSidePage)searchSidePage.getInfoFrame().getSidePages().get(DateInfoFrame.DETAIL_SIDE_PAGE);
-				page.getDetail(item);
+				page.getDetail(searchSidePage.getInfoFrame().parseJSONObjectToFood(item));
 				searchSidePage.getInfoFrame().showHide(DateInfoFrame.DETAIL_SIDE_PAGE);
 			}
 		});

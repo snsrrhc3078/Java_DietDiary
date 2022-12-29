@@ -30,6 +30,7 @@ import com.dietdiary.components.datecomponents.MyTextField;
 import com.dietdiary.domain.DietDiaryMembers;
 import com.dietdiary.domain.Food;
 import com.dietdiary.domain.History;
+import com.dietdiary.model.repository.FoodDAO;
 import com.dietdiary.util.DBManager;
 
 public class DetailSidePage extends SidePage{
@@ -211,41 +212,45 @@ public class DetailSidePage extends SidePage{
 		
 		add(backButtonForm);
 	}
-	public void getDetail(JSONObject item) {
-		Calendar selectedTime = infoFrame.getSelectedTime();
-		
-		DietDiaryMembers dietDiaryMembers = new DietDiaryMembers();
-		dietDiaryMembers.setDiet_diary_members_idx(infoFrame.main.getLoginedUserInfo().getDiet_diary_members_idx());
-		
-		History history = new History(); //외래키를 위해 생성
-		history.setDietDiaryMembers(dietDiaryMembers);
-		history.setYear(selectedTime.get(Calendar.YEAR));
-		history.setMonth(selectedTime.get(Calendar.MONTH)+1);
-		history.setDay(selectedTime.get(Calendar.DATE));
-		
-		food = new Food();
-		
-		String foodName = (String)item.get("DESC_KOR");
-		String brand = (String)item.get("ANIMAL_PLANT");
-		int cal, carbs, proteins, fats;
-		String servesize, regyear;
-		cal = (int)Double.parseDouble((String)item.get("NUTR_CONT1"));
-		carbs = (int)Double.parseDouble((String)item.get("NUTR_CONT2"));
-		proteins = (int)Double.parseDouble((String)item.get("NUTR_CONT3"));
-		fats = (int)Double.parseDouble((String)item.get("NUTR_CONT4"));
-		servesize = (String)item.get("SERVING_WT");
-		regyear = (String)item.get("BGN_YEAR");
-		//이름, 브랜드, 칼로리, 탄수, 단백질, 지방, 서빙사이즈, 연도
-		food.setHistory(history);
-		food.setName(foodName);
-		food.setBrand(brand);
-		food.setCalories(cal);
-		food.setCarbs(carbs);
-		food.setProteins(proteins);
-		food.setFats(fats);
-		food.setServeSize(servesize);
-		food.setRegyear(regyear);
-		
+//	public void getDetail(JSONObject item) {
+//		Calendar selectedTime = infoFrame.getSelectedTime();
+//		
+//		DietDiaryMembers dietDiaryMembers = new DietDiaryMembers();
+//		dietDiaryMembers.setDiet_diary_members_idx(infoFrame.main.getLoginedUserInfo().getDiet_diary_members_idx());
+//		
+//		History history = new History(); //외래키를 위해 생성
+//		history.setDietDiaryMembers(dietDiaryMembers);
+//		history.setYear(selectedTime.get(Calendar.YEAR));
+//		history.setMonth(selectedTime.get(Calendar.MONTH)+1);
+//		history.setDay(selectedTime.get(Calendar.DATE));
+//		
+//		food = new Food();
+//		
+//		String foodName = (String)item.get("DESC_KOR");
+//		String brand = (String)item.get("ANIMAL_PLANT");
+//		int cal, carbs, proteins, fats;
+//		String servesize, regyear;
+//		cal = (int)Double.parseDouble((String)item.get("NUTR_CONT1"));
+//		carbs = (int)Double.parseDouble((String)item.get("NUTR_CONT2"));
+//		proteins = (int)Double.parseDouble((String)item.get("NUTR_CONT3"));
+//		fats = (int)Double.parseDouble((String)item.get("NUTR_CONT4"));
+//		servesize = (String)item.get("SERVING_WT");
+//		regyear = (String)item.get("BGN_YEAR");
+//		//이름, 브랜드, 칼로리, 탄수, 단백질, 지방, 서빙사이즈, 연도
+//		food.setHistory(history);
+//		food.setName(foodName);
+//		food.setBrand(brand);
+//		food.setCalories(cal);
+//		food.setCarbs(carbs);
+//		food.setProteins(proteins);
+//		food.setFats(fats);
+//		food.setServeSize(servesize);
+//		food.setRegyear(regyear);
+//		
+//		setLabel();
+//	}
+	public void getDetail(Food food) {
+		this.food = food;
 		setLabel();
 	}
 	public void setLabel() {
@@ -307,6 +312,29 @@ public class DetailSidePage extends SidePage{
 			JOptionPane.showMessageDialog(infoFrame, "등록 실패");
 		}
 		infoFrame.clearAllPages();
+	}
+	public void deleteFood(int food_idx) {
+		FoodDAO foodDAO = infoFrame.getFoodDAO();
+		
+		Food food = foodDAO.selectByPKForUpdate(food_idx);
+		int result = 0;
+		System.out.println(food_idx);
+		
+		if(food == null) {
+			JOptionPane.showMessageDialog(infoFrame, "이미 존재하지 않는 항목입니다");
+//			try {
+//				DBManager.getInstance().getConnection().commit();
+//			} catch (SQLException e) {
+//				e.printStackTrace();
+//			}
+			return;
+		}else {
+			result = foodDAO.delete(food_idx);
+		}
+		
+		if(result == 0) {
+			JOptionPane.showMessageDialog(infoFrame, "삭제 실패");
+		}
 	}
 
 	public void clearPage() {

@@ -7,8 +7,13 @@ import java.util.Calendar;
 import javax.management.monitor.Monitor;
 import javax.swing.JFrame;
 
+import org.json.simple.JSONObject;
+
 import com.dietdiary.client.DiaryPage;
 import com.dietdiary.client.DietDiaryMain;
+import com.dietdiary.domain.DietDiaryMembers;
+import com.dietdiary.domain.Food;
+import com.dietdiary.domain.History;
 import com.dietdiary.model.repository.FoodDAO;
 import com.dietdiary.model.repository.HistoryDAO;
 
@@ -72,6 +77,42 @@ public class DateInfoFrame extends JFrame{
 		//히스토리 페이지 초기화 해야함
 		((SearchSidePage)sidePages.get(SEARCH_SIDE_PAGE)).clearPage();
 		((DetailSidePage)sidePages.get(DETAIL_SIDE_PAGE)).clearPage();
+	}
+	public Food parseJSONObjectToFood(JSONObject obj) {
+
+		DietDiaryMembers dietDiaryMembers = new DietDiaryMembers();
+		dietDiaryMembers.setDiet_diary_members_idx(main.getLoginedUserInfo().getDiet_diary_members_idx());
+		
+		History history = new History(); //외래키를 위해 생성
+		history.setDietDiaryMembers(dietDiaryMembers);
+		history.setYear(selectedTime.get(Calendar.YEAR));
+		history.setMonth(selectedTime.get(Calendar.MONTH)+1);
+		history.setDay(selectedTime.get(Calendar.DATE));
+		
+		Food food = new Food();
+		
+		String foodName = (String)obj.get("DESC_KOR");
+		String brand = (String)obj.get("ANIMAL_PLANT");
+		int cal, carbs, proteins, fats;
+		String servesize, regyear;
+		cal = (int)Double.parseDouble((String)obj.get("NUTR_CONT1"));
+		carbs = (int)Double.parseDouble((String)obj.get("NUTR_CONT2"));
+		proteins = (int)Double.parseDouble((String)obj.get("NUTR_CONT3"));
+		fats = (int)Double.parseDouble((String)obj.get("NUTR_CONT4"));
+		servesize = (String)obj.get("SERVING_WT");
+		regyear = (String)obj.get("BGN_YEAR");
+//		//이름, 브랜드, 칼로리, 탄수, 단백질, 지방, 서빙사이즈, 연도
+		food.setHistory(history);
+		food.setName(foodName);
+		food.setBrand(brand);
+		food.setCalories(cal);
+		food.setCarbs(carbs);
+		food.setProteins(proteins);
+		food.setFats(fats);
+		food.setServeSize(servesize);
+		food.setRegyear(regyear);
+		
+		return food;
 	}
 	
 	public ArrayList<SidePage> getSidePages() {

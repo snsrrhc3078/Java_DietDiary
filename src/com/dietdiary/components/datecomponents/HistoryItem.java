@@ -10,15 +10,20 @@ import java.awt.event.ActionListener;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 
+import com.dietdiary.client.date.DateInfoFrame;
+import com.dietdiary.client.date.DetailSidePage;
+import com.dietdiary.client.date.HistorySidePage;
 import com.dietdiary.domain.Food;
 
 public class HistoryItem extends Item{
 	JPanel pEast;
 	MySideButton btDel;
 	Food food;
-	public HistoryItem(JComponent comp, double widthRatio, double heightRatio, Food food) {
+	HistorySidePage historySidePage;
+	public HistoryItem(JComponent comp, double widthRatio, double heightRatio, Food food, HistorySidePage historySidePage) {
 		super(comp, widthRatio, heightRatio);
 		this.food = food;
+		this.historySidePage = historySidePage;
 		
 		pEast = new JPanel() {
 			@Override
@@ -32,7 +37,9 @@ public class HistoryItem extends Item{
 		btDel.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("닫기 눌림");
+				DetailSidePage page = (DetailSidePage)historySidePage.getInfoFrame().getSidePages().get(DateInfoFrame.DETAIL_SIDE_PAGE);
+				page.deleteFood(food.getFood_idx());
+				historySidePage.init();
 			}
 		});
 	}

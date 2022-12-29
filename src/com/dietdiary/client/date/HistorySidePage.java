@@ -191,7 +191,7 @@ public class HistorySidePage extends SidePage{
 		int blockByItem = pagingManager.getCurrentBlockByPage() * pagingManager.getPageSize();
 		
 		for(int i=0 + pageByItem + blockByItem;i< itemSize + pageByItem + blockByItem;i++) {
-			HistoryItem item = new HistoryItem(itemListForm, 9.5/10.0, 1.463/10.0, itemInfoList.get(i));
+			HistoryItem item = new HistoryItem(itemListForm, 9.5/10.0, 1.463/10.0, itemInfoList.get(i), this);
 			itemListForm.add(item);
 			itemList.add(item);
 			
@@ -243,7 +243,7 @@ public class HistorySidePage extends SidePage{
 	public History registHistory(History FKAndDates) throws SQLException{
 		HistoryDAO historyDAO = infoFrame.getHistoryDAO();
 		
-		History isRecordExist = historyDAO.selectByFKAndDates(FKAndDates);
+		History isRecordExist = historyDAO.selectByFKAndDatesForUpdate(FKAndDates);
 		//primaryKey에 해당하는 레코드가 있다면 해당 레코드를 반환
 		if(isRecordExist!=null) {
 			return isRecordExist;
@@ -256,7 +256,7 @@ public class HistorySidePage extends SidePage{
 			throw new SQLException();
 		}
 		//primaryKey로 insert 했으므로 insert된 primaryKey의 레코드를 가져옴
-		isRecordExist = historyDAO.selectByFKAndDates(FKAndDates);
+		isRecordExist = historyDAO.selectByFKAndDatesForUpdate(FKAndDates);
 		//레코드를 가져오는데 성공했다면 반환, 실패했다면 throw
 		if(isRecordExist!=null) {
 			return isRecordExist;
