@@ -77,6 +77,7 @@ public class DateInfoFrame extends JFrame{
 		((HistorySidePage)sidePages.get(HISTORY_SIDE_PAGE)).clearPage();
 		((SearchSidePage)sidePages.get(SEARCH_SIDE_PAGE)).clearPage();
 		((DetailSidePage)sidePages.get(DETAIL_SIDE_PAGE)).clearPage();
+		((DiaryPage)main.getPages().get(DietDiaryMain.DIARY_PAGE)).init();
 	}
 	public Food parseJSONObjectToFood(JSONObject obj) {
 

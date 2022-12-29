@@ -55,7 +55,7 @@ public class HistoryItem extends Item{
 			public void actionPerformed(ActionEvent e) {
 				DetailSidePage page = (DetailSidePage)historySidePage.getInfoFrame().getSidePages().get(DateInfoFrame.DETAIL_SIDE_PAGE);
 				page.deleteFood(food.getFood_idx());
-				historySidePage.init();
+				historySidePage.getInfoFrame().clearAllPages();
 			}
 		});
 	}

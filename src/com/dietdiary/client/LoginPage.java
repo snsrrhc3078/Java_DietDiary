@@ -91,6 +91,8 @@ public class LoginPage extends Page implements ActionListener {
 			JOptionPane.showMessageDialog(main, "환영합니다 " + member.getName() + " 님!");
 			main.setLogin(true);
 			main.setLoginedUserInfo(member);
+			DiaryPage page = (DiaryPage)main.getPages().get(DietDiaryMain.DIARY_PAGE);
+			page.init();
 			main.showHide(DietDiaryMain.DIARY_PAGE);
 		}else {
 			JOptionPane.showMessageDialog(main, "존재하거나 일치하지 않는 아이디 혹은 패스워드 입니다");

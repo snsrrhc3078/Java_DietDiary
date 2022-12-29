@@ -3,6 +3,8 @@ package com.dietdiary.model.repository;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.dietdiary.domain.DietDiaryMembers;
 import com.dietdiary.domain.History;
@@ -14,7 +16,7 @@ public class HistoryDAO {
 	
 	/**
 	 * selectByFKAndDates 메서드에서 동시성 문제를 해결하기 위해 for update구문을 추가한 메서드
-	 * @param history 레코드를 탐색하기 위해 primary key와 1:1 대응되는 컬럼들을 가지고 있는 객체. DIET_DIARY_MEMBERS_IDX, YEAR, MONTH, DAY는 반드시 값이 존재햐아 함
+	 * @param history 레코드를 탐색하기 위해 primary key와 1:1 대응되는 컬럼들을 가지고 있는 DTO. DIET_DIARY_MEMBERS_IDX, YEAR, MONTH, DAY는 반드시 값이 존재햐아 함
 	 * @return 값이 존재할경우 해당하는 History 객체 반환, 존재하지 않을경우 null
 	 */
 	public History selectByFKAndDatesForUpdate(History history) {
@@ -62,7 +64,7 @@ public class HistoryDAO {
 	}
 	/**
 	 * 
-	 * @param history 레코드를 탐색하기 위해 primary key와 1:1 대응되는 컬럼들을 가지고 있는 객체 DIET_DIARY_MEMBERS_IDX, YEAR, MONTH, DAY는 반드시 값이 존재햐아 함
+	 * @param history 레코드를 탐색하기 위해 primary key와 1:1 대응되는 컬럼들을 가지고 있는 DTO. DIET_DIARY_MEMBERS_IDX, YEAR, MONTH, DAY는 반드시 값이 존재햐아 함
 	 * @return 값이 존재할경우 해당하는 History 객체 반환, 존재하지 않을경우 null
 	 */
 	public History selectByFKAndDates(History history) {
@@ -108,6 +110,53 @@ public class HistoryDAO {
 		}
 		return result;
 	}
+	
+	/**
+	 * 
+	 * @param history 특정 유저의 해당 년도의 해당 달에 존재하는 레코드들을 탐색하기 위해 필요한 정보들을 가지고 있는 DTO. DIET_DIARY_MEMBERS_IDX, YEAR, MONTH는 반드시 값이 존재해아 함
+	 * @return 특정 유저의 해당 달에 존재하는 레코드들을 List형태로 반환
+	 */
+	public List<History> selectAllByFKAndMonth(History FKAndMonth){
+		List<History> list = new ArrayList<>();
+		String sql = "SELECT * FROM HISTORY WHERE DIET_DIARY_MEMBERS_IDX=? AND YEAR=? AND MONTH=?";
+		PreparedStatement pst = null;
+		ResultSet rs = null;
+		try {
+			pst = dbManager.getConnection().prepareStatement(sql);
+			/*
+			 	1 int DIET_DIARY_MEMBERS_IDX
+			 	2 int YEAR
+			 	3 int MONTH
+			 */
+			pst.setInt(1, FKAndMonth.getDietDiaryMembers().getDiet_diary_members_idx());
+			pst.setInt(2, FKAndMonth.getYear());
+			pst.setInt(3, FKAndMonth.getMonth());
+			rs = pst.executeQuery();
+			while(rs.next()) {
+				History history = new History();
+				
+				DietDiaryMembers diaryMembers = new DietDiaryMembers();
+				diaryMembers.setDiet_diary_members_idx(rs.getInt("DIET_DIARY_MEMBERS_IDX"));
+				
+				history.setHistory_idx(rs.getInt("HISTORY_IDX"));
+				history.setDietDiaryMembers(diaryMembers);
+				history.setYear(rs.getInt("YEAR"));
+				history.setMonth(rs.getInt("MONTH"));
+				history.setDay(rs.getInt("DAY"));
+				history.setTotal_calories(rs.getInt("TOTAL_CALORIES"));
+				history.setTotal_carbs(rs.getInt("TOTAL_CARBS"));
+				history.setTotal_proteins(rs.getInt("TOTAL_PROTEINS"));
+				history.setTotal_fats(rs.getInt("TOTAL_FATS"));
+				list.add(history);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			dbManager.release(pst, rs);
+		}
+		return list;
+	}
+	
 	
 	public int insert(History history) throws SQLException{
 		int result = 0;

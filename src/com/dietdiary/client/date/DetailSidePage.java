@@ -176,8 +176,12 @@ public class DetailSidePage extends SidePage{
 		tServe.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusLost(FocusEvent e) {
-				if (tServe.getText().charAt(0) == '.') {
-					tServe.setText("0" + tServe.getText());
+				if(tServe.getText().length()!=0) {
+					if (tServe.getText().charAt(0) == '.') {
+						tServe.setText("0" + tServe.getText());
+					}
+				}else {
+					tServe.setText("0");
 				}
 				setLabel();
 			}
@@ -321,9 +325,7 @@ public class DetailSidePage extends SidePage{
 		}
 		
 		
-		if(isCommited) {
-			JOptionPane.showMessageDialog(infoFrame, "등록 성공");
-		}else {
+		if(!isCommited) {
 			JOptionPane.showMessageDialog(infoFrame, "등록 실패");
 		}
 	}
@@ -353,11 +355,7 @@ public class DetailSidePage extends SidePage{
 			JOptionPane.showMessageDialog(infoFrame, "존재하지 않는 항목입니다");
 			return;
 		}else {
-			System.out.println(tServe.getText());
 			food.setQuantity(Double.parseDouble(tServe.getText()));
-			System.out.println(food.getName());
-			System.out.println(food.getQuantity());
-			System.out.println(food.getFood_idx());
 			result = foodDAO.update(food);
 		}
 		

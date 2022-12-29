@@ -1,28 +1,27 @@
 package com.dietdiary.client;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
 import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.border.LineBorder;
-import javax.swing.plaf.basic.BasicBorders;
 
 import com.dietdiary.components.DateCell;
 import com.dietdiary.components.DayCell;
 import com.dietdiary.components.MyButton;
 import com.dietdiary.components.MyButtonForm;
-import com.dietdiary.components.MyCell;
 import com.dietdiary.components.MyFormWrapper;
 import com.dietdiary.components.MyLabel;
+import com.dietdiary.components.datecomponents.HistoryItem;
+import com.dietdiary.domain.DietDiaryMembers;
+import com.dietdiary.domain.History;
+import com.dietdiary.model.repository.HistoryDAO;
 
 public class DiaryPage extends Page {
 
@@ -58,6 +57,9 @@ public class DiaryPage extends Page {
 	DayCell[] days;
 	DateCell[][] dates;
 	Calendar currentTime;
+	
+	//로그가 있는지 확인하기 위해 정보를 받아올 ArrayList
+	List<History> historyList = new ArrayList<>();
 
 	public DiaryPage(DietDiaryMain main) {
 		super(main);
@@ -75,7 +77,7 @@ public class DiaryPage extends Page {
 	public void createNav() {
 		// nav할당
 		navigationBar = new MyFormWrapper(this, pWidth, 1 / 12.0, 25);
-		lbName = new JLabel("  Rabin 님");
+		lbName = new JLabel("  " + "NAME" + " 님");
 		navButtonForm = new MyButtonForm();
 		navButtonForm.addMyButton("Log out");
 		
@@ -106,7 +108,7 @@ public class DiaryPage extends Page {
 			public void actionPerformed(ActionEvent e) {
 				currentTime.set(Calendar.MONTH, currentTime.get(Calendar.MONTH)-1);
 				setMonth();
-				getDates();
+				init();
 			}
 		});
 		btNext.addActionListener(new ActionListener() {
@@ -114,7 +116,7 @@ public class DiaryPage extends Page {
 			public void actionPerformed(ActionEvent e) {
 				currentTime.set(Calendar.MONTH, currentTime.get(Calendar.MONTH)+1);
 				setMonth();
-				getDates();
+				init();
 			}
 		});
 	}
@@ -133,15 +135,11 @@ public class DiaryPage extends Page {
 		dates = new DateCell[6][7];
 		for(int i =0;i<dates.length;i++) {
 			for(int j = 0;j<dates[i].length;j++) {
-				dates[i][j] = new DateCell(cellWidth, cellHeight, main);
+				dates[i][j] = new DateCell(cellWidth, cellHeight, main, currentTime);
 				diary.add(dates[i][j]);
 			}
 		}
 		
-		//dates 제작
-		getDayOfStart(currentTime);
-		getDateOfLast(currentTime);
-		getDates();
 	}
 	
 	public void setMonth() {
@@ -167,17 +165,51 @@ public class DiaryPage extends Page {
 				if(getDayOfStart(currentTime)<=index) {
 					n++;
 					if(getDateOfLast(currentTime)>=n) {
-//						System.out.println(n);
 						dates[i][j].setDate(n);
 						dates[i][j].setFlag(true);
 					}else {
 						dates[i][j].setFlag(false);
+						dates[i][j].setDate(0);
 					}
 				}else {
 					dates[i][j].setFlag(false);
+					dates[i][j].setDate(0);
 				}
 			}
 		}
+	}
+	public void getHistoryList() {
+		HistoryDAO historyDAO = main.dateInfoFrame.getHistoryDAO();
+		
+		DietDiaryMembers dietDiaryMembers = new DietDiaryMembers();
+		DietDiaryMembers loginInfo = main.getLoginedUserInfo();
+		dietDiaryMembers.setDiet_diary_members_idx(loginInfo.getDiet_diary_members_idx());
+		
+		History FKAndMonth = new History();
+		FKAndMonth.setDietDiaryMembers(dietDiaryMembers);
+		FKAndMonth.setYear(currentTime.get(Calendar.YEAR));
+		FKAndMonth.setMonth(currentTime.get(Calendar.MONTH) + 1);
+		historyList = historyDAO.selectAllByFKAndMonth(FKAndMonth);
+	}
+	public void setHasLogOnItems() {
+		for(int i =0;i<dates.length;i++) {
+			for(int j =0;j<dates[i].length;j++) {
+				DateCell date = dates[i][j];
+				History historyOfDate = null;
+				for(int k =0;k<historyList.size();k++) {
+					if(date.getDate()==historyList.get(k).getDay()) {
+						historyOfDate = historyList.get(k);
+					}
+				}
+				date.setHistory(historyOfDate);
+				date.setToday();//오늘인지 판별하고 isToday설정하는 메서드
+			}
+		}
+	}
+	public void init() {
+		getDates();
+		getHistoryList();
+		setHasLogOnItems();
 		diary.updateUI();
 	}
 	
