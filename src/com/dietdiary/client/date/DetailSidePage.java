@@ -49,12 +49,14 @@ public class DetailSidePage extends SidePage{
 	JFormattedTextField tServe;
 	
 	MyFormWrapper registButtonForm;
-	MySideButton btReg;
+	MySideButton btReg, btEdit;
 	
 	MyFormWrapper backButtonForm;
 	MySideButton btBack;
 	
-	
+	public static final int REGIST_BUTTON = 0;
+	public static final int EDIT_BUTTON = 1;
+
 	
 	int fontsize = 20;
 	
@@ -184,18 +186,37 @@ public class DetailSidePage extends SidePage{
 	public void createRegistButtonForm() {
 		registButtonForm = new MyFormWrapper(this, 9/10.0, 0.5/10.0, 25);
 		btReg = new MySideButton("OK");
-		registButtonForm.add(btReg);
+		btEdit = new MySideButton("Update");
+		setRegistButton(REGIST_BUTTON);
 		
+		add(registButtonForm);
 		
 		btReg.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				registFood();
 				infoFrame.showHide(DateInfoFrame.HISTORY_SIDE_PAGE);
+				infoFrame.clearAllPages();
 			}
 		});
 		
-		add(registButtonForm);
+		btEdit.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				updateFood();
+				infoFrame.showHide(DateInfoFrame.HISTORY_SIDE_PAGE);
+				infoFrame.clearAllPages();
+			}
+		});
+	}
+	public void setRegistButton(int btnNo) {
+		registButtonForm.removeAll();
+		
+		if(btnNo == REGIST_BUTTON) {
+			registButtonForm.add(btReg);
+		}else if(btnNo == EDIT_BUTTON){
+			registButtonForm.add(btEdit);
+		}
 	}
 	public void createBackButtonForm() {
 		backButtonForm = new MyFormWrapper(this, 9/10.0, 0.5/10.0, 25);
@@ -205,52 +226,33 @@ public class DetailSidePage extends SidePage{
 		btBack.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				infoFrame.showHide(DateInfoFrame.SEARCH_SIDE_PAGE);
+				getBack();
 				clearPage();
 			}
 		});
 		
 		add(backButtonForm);
 	}
-//	public void getDetail(JSONObject item) {
-//		Calendar selectedTime = infoFrame.getSelectedTime();
-//		
-//		DietDiaryMembers dietDiaryMembers = new DietDiaryMembers();
-//		dietDiaryMembers.setDiet_diary_members_idx(infoFrame.main.getLoginedUserInfo().getDiet_diary_members_idx());
-//		
-//		History history = new History(); //외래키를 위해 생성
-//		history.setDietDiaryMembers(dietDiaryMembers);
-//		history.setYear(selectedTime.get(Calendar.YEAR));
-//		history.setMonth(selectedTime.get(Calendar.MONTH)+1);
-//		history.setDay(selectedTime.get(Calendar.DATE));
-//		
-//		food = new Food();
-//		
-//		String foodName = (String)item.get("DESC_KOR");
-//		String brand = (String)item.get("ANIMAL_PLANT");
-//		int cal, carbs, proteins, fats;
-//		String servesize, regyear;
-//		cal = (int)Double.parseDouble((String)item.get("NUTR_CONT1"));
-//		carbs = (int)Double.parseDouble((String)item.get("NUTR_CONT2"));
-//		proteins = (int)Double.parseDouble((String)item.get("NUTR_CONT3"));
-//		fats = (int)Double.parseDouble((String)item.get("NUTR_CONT4"));
-//		servesize = (String)item.get("SERVING_WT");
-//		regyear = (String)item.get("BGN_YEAR");
-//		//이름, 브랜드, 칼로리, 탄수, 단백질, 지방, 서빙사이즈, 연도
-//		food.setHistory(history);
-//		food.setName(foodName);
-//		food.setBrand(brand);
-//		food.setCalories(cal);
-//		food.setCarbs(carbs);
-//		food.setProteins(proteins);
-//		food.setFats(fats);
-//		food.setServeSize(servesize);
-//		food.setRegyear(regyear);
-//		
-//		setLabel();
-//	}
+	public void getBack() {
+		if(registButtonForm.getComponent(0)==btReg) {
+			infoFrame.showHide(DateInfoFrame.SEARCH_SIDE_PAGE);
+		}else if(registButtonForm.getComponent(0)==btEdit) {
+			infoFrame.showHide(DateInfoFrame.HISTORY_SIDE_PAGE);
+		}
+	}
+	
+	//기타 메서드
 	public void getDetail(Food food) {
 		this.food = food;
+		double quantity = food.getQuantity();
+		
+		//만약 quantity의 값이 정수나 마찬가지라면(ex 2.0) tServe에 정수로 넣고 아니라면 실수로 넣음
+		if((double)(int)quantity==quantity) {
+			tServe.setText(Integer.toString((int)quantity));
+		}else {
+			tServe.setText(Double.toString(quantity));
+		}
+		
 		setLabel();
 	}
 	public void setLabel() {
@@ -263,6 +265,19 @@ public class DetailSidePage extends SidePage{
 		lbBrandValue.setText(food.getBrand());
 		lbYearValue.setText(food.getRegyear() + " 년");
 	}
+	public void clearPage() {
+		food = null;
+		lbCarbValue.setText("0 g ");
+		lbProValue.setText("0 g ");
+		lbFatValue.setText("0 g ");
+		lbKcalValue.setText("0 kcal");
+		lbBrandValue.setText("");
+		lbYearValue.setText("N/A 년");
+		lbServe.setText("  인분(N/A g)  ");
+		tServe.setText("1");
+	}
+	
+	//DAO 처리
 	public void registFood() {
 		HistorySidePage page = (HistorySidePage)infoFrame.getSidePages().get(DateInfoFrame.HISTORY_SIDE_PAGE);
 		DBManager dbManager = infoFrame.main.getDbManager();
@@ -311,22 +326,15 @@ public class DetailSidePage extends SidePage{
 		}else {
 			JOptionPane.showMessageDialog(infoFrame, "등록 실패");
 		}
-		infoFrame.clearAllPages();
 	}
 	public void deleteFood(int food_idx) {
 		FoodDAO foodDAO = infoFrame.getFoodDAO();
 		
 		Food food = foodDAO.selectByPKForUpdate(food_idx);
 		int result = 0;
-		System.out.println(food_idx);
 		
 		if(food == null) {
 			JOptionPane.showMessageDialog(infoFrame, "이미 존재하지 않는 항목입니다");
-//			try {
-//				DBManager.getInstance().getConnection().commit();
-//			} catch (SQLException e) {
-//				e.printStackTrace();
-//			}
 			return;
 		}else {
 			result = foodDAO.delete(food_idx);
@@ -336,16 +344,26 @@ public class DetailSidePage extends SidePage{
 			JOptionPane.showMessageDialog(infoFrame, "삭제 실패");
 		}
 	}
-
-	public void clearPage() {
-		food = null;
-		lbCarbValue.setText("0 g ");
-		lbProValue.setText("0 g ");
-		lbFatValue.setText("0 g ");
-		lbKcalValue.setText("0 kcal");
-		lbBrandValue.setText("");
-		lbYearValue.setText("N/A 년");
-		lbServe.setText("  인분(N/A g)  ");
-		tServe.setText("1");
+	public void updateFood() {
+		FoodDAO foodDAO = infoFrame.getFoodDAO();
+		food = foodDAO.selectByPKForUpdate(food.getFood_idx());
+		int result = 0;
+		
+		if(food == null) {
+			JOptionPane.showMessageDialog(infoFrame, "존재하지 않는 항목입니다");
+			return;
+		}else {
+			System.out.println(tServe.getText());
+			food.setQuantity(Double.parseDouble(tServe.getText()));
+			System.out.println(food.getName());
+			System.out.println(food.getQuantity());
+			System.out.println(food.getFood_idx());
+			result = foodDAO.update(food);
+		}
+		
+		if(result == 0) {
+			JOptionPane.showMessageDialog(infoFrame, "수정 실패");
+		}
 	}
+
 }

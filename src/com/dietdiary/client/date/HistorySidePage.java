@@ -194,13 +194,6 @@ public class HistorySidePage extends SidePage{
 			HistoryItem item = new HistoryItem(itemListForm, 9.5/10.0, 1.463/10.0, itemInfoList.get(i), this);
 			itemListForm.add(item);
 			itemList.add(item);
-			
-			item.addMouseListener(new MouseAdapter() {
-				@Override
-				public void mouseClicked(MouseEvent e) {
-					System.out.println("아이템 본체 눌림");
-				}
-			});
 		}
 		
 		itemListForm.updateUI();
@@ -234,6 +227,10 @@ public class HistorySidePage extends SidePage{
 		pageForm.add(lbNext);
 		pageForm.updateUI();
 	}
+	public void clearPage() {
+		init();
+	}
+	
 	/**
 	 * 
 	 * @param FKAndDates 등록할 history의 정보를 가진 dto, DIET_DIARY_MEMBERS_IDX, YEAR, MONTH, DAY 는 반드시 가지고 있어야 한다 

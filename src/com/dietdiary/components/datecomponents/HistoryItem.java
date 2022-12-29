@@ -6,6 +6,9 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.List;
 
 import javax.swing.JComponent;
 import javax.swing.JPanel;
@@ -13,6 +16,7 @@ import javax.swing.JPanel;
 import com.dietdiary.client.date.DateInfoFrame;
 import com.dietdiary.client.date.DetailSidePage;
 import com.dietdiary.client.date.HistorySidePage;
+import com.dietdiary.client.date.SidePage;
 import com.dietdiary.domain.Food;
 
 public class HistoryItem extends Item{
@@ -33,6 +37,18 @@ public class HistoryItem extends Item{
 		btDel = new MySideButton("X");
 		pEast.add(btDel);
 		add(pEast, BorderLayout.EAST);
+		
+		addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				DateInfoFrame infoFrame = historySidePage.getInfoFrame();
+				List<SidePage> list = infoFrame.getSidePages();
+				DetailSidePage page = (DetailSidePage)list.get(DateInfoFrame.DETAIL_SIDE_PAGE);
+				page.getDetail(food);
+				page.setRegistButton(DetailSidePage.EDIT_BUTTON);
+				infoFrame.showHide(DateInfoFrame.DETAIL_SIDE_PAGE);
+			}
+		});
 		
 		btDel.addActionListener(new ActionListener() {
 			@Override
@@ -58,6 +74,7 @@ public class HistoryItem extends Item{
 		g.setFont(defaultFont);
 		double quantity = food.getQuantity();
 		int totalServeSize = (int)(Integer.parseInt(food.getServeSize()) * quantity);
+		int cals = (int)(food.getCalories() * quantity);
 		String brand = food.getBrand();
 		if(brand==null) {
 			brand = "";
@@ -71,7 +88,7 @@ public class HistoryItem extends Item{
 			g.drawString(brand + quantity + "인분(" + totalServeSize + "g)", 10, 30);
 		}
 
-		g.drawString("1000" + "kcal", 135, 30);
+		g.drawString(cals + "kcal", 135, 30);
 	}
 
 }

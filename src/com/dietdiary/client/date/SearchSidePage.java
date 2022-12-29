@@ -80,12 +80,10 @@ public class SearchSidePage extends SidePage{
 		btBack = new MySideButton("Back");
 		backButtonForm.add(btBack);
 		
-		
 		add(searchForm);
 		add(searchedListForm);
 		add(pageForm);
 		add(backButtonForm);
-		
 		
 		tSearch.addKeyListener(new KeyAdapter() {
 			@Override
@@ -177,7 +175,6 @@ public class SearchSidePage extends SidePage{
 			np.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent e) {
-					
 					Thread thread = new Thread() {
 						@Override
 						public void run() {

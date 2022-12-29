@@ -99,6 +99,7 @@ public class FoodDAO {
 				history.setHistory_idx(rs.getInt("HISTORY_IDX"));
 				
 				food = new Food();
+				food.setFood_idx(rs.getInt("FOOD_IDX"));
 				food.setHistory(history);
 				food.setName(rs.getString("NAME"));
 				food.setBrand(rs.getString("BRAND"));
@@ -128,6 +129,22 @@ public class FoodDAO {
 			result = pst.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
+		}
+		return result;
+	}
+	public int update(Food food) {
+		int result = 0;
+		String sql = "UPDATE FOOD SET QUANTITY=? WHERE FOOD_IDX=?";
+		PreparedStatement pst = null;
+		try {
+			pst = dbManager.getConnection().prepareStatement(sql);
+			pst.setDouble(1, food.getQuantity());
+			pst.setInt(2, food.getFood_idx());
+			result = pst.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			dbManager.release(pst);
 		}
 		return result;
 	}

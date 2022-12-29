@@ -74,7 +74,7 @@ public class DateInfoFrame extends JFrame{
 		}
 	}
 	public void clearAllPages() {
-		//히스토리 페이지 초기화 해야함
+		((HistorySidePage)sidePages.get(HISTORY_SIDE_PAGE)).clearPage();
 		((SearchSidePage)sidePages.get(SEARCH_SIDE_PAGE)).clearPage();
 		((DetailSidePage)sidePages.get(DETAIL_SIDE_PAGE)).clearPage();
 	}
@@ -111,6 +111,7 @@ public class DateInfoFrame extends JFrame{
 		food.setFats(fats);
 		food.setServeSize(servesize);
 		food.setRegyear(regyear);
+		food.setQuantity(1);
 		
 		return food;
 	}

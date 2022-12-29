@@ -7,6 +7,7 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.List;
 
 import javax.swing.JComponent;
 import javax.swing.JPanel;
@@ -16,6 +17,7 @@ import org.json.simple.JSONObject;
 import com.dietdiary.client.date.DateInfoFrame;
 import com.dietdiary.client.date.DetailSidePage;
 import com.dietdiary.client.date.SearchSidePage;
+import com.dietdiary.client.date.SidePage;
 
 public class SearchedItem extends Item{
 	JSONObject item;
@@ -29,9 +31,12 @@ public class SearchedItem extends Item{
 		addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				DetailSidePage page = (DetailSidePage)searchSidePage.getInfoFrame().getSidePages().get(DateInfoFrame.DETAIL_SIDE_PAGE);
-				page.getDetail(searchSidePage.getInfoFrame().parseJSONObjectToFood(item));
-				searchSidePage.getInfoFrame().showHide(DateInfoFrame.DETAIL_SIDE_PAGE);
+				DateInfoFrame infoFrame = searchSidePage.getInfoFrame();
+				List<SidePage> list = infoFrame.getSidePages();
+				DetailSidePage page = (DetailSidePage)list.get(DateInfoFrame.DETAIL_SIDE_PAGE);
+				page.getDetail(infoFrame.parseJSONObjectToFood(item));
+				page.setRegistButton(DetailSidePage.REGIST_BUTTON);
+				infoFrame.showHide(DateInfoFrame.DETAIL_SIDE_PAGE);
 			}
 		});
 	}
