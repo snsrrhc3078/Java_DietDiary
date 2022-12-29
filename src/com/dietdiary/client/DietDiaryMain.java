@@ -33,6 +33,8 @@ public class DietDiaryMain extends JFrame{
 	public static final int SIGN_IN_PAGE = 0;
 	public static final int SIGN_UP_PAGE = 1;
 	public static final int DIARY_PAGE = 2;
+	public static final int FORGOT_PASSWORD_PAGE = 3;
+	public static final int CHANGE_PASSWORD_PAGE = 4;
 	
 	public DietDiaryMain() {
 		
@@ -61,6 +63,8 @@ public class DietDiaryMain extends JFrame{
 		pages.add(new SignInPage(this));
 		pages.add(new SignUpPage(this));
 		pages.add(new DiaryPage(this));
+		pages.add(new ForgotPasswordPage(this));
+		pages.add(new ChangePasswordPage(this));
 		
 		for(int i =0;i<pages.size();i++) {
 			add(pages.get(i));

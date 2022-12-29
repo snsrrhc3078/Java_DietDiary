@@ -3,7 +3,7 @@ package com.dietdiary.client;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
+import java.sql.SQLException;
 import java.util.List;
 
 import javax.swing.JComboBox;
@@ -11,7 +11,6 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 import com.dietdiary.components.MyButton;
@@ -22,50 +21,47 @@ import com.dietdiary.components.MyTitle;
 import com.dietdiary.domain.DietDiaryMembers;
 import com.dietdiary.util.StringUtil;
 
-public class SignUpPage extends Page implements ActionListener {
+public class ForgotPasswordPage extends Page implements ActionListener{
+
 	JLabel lbTitle;
 	JPanel pFormWrapper;
 	MyInputForm pInputForm;
 	MyButtonForm pButtonForm;
-
+	
+	String[] questions = { "당신이 좋아하는 음식은?", "당신이 졸업한 초등학교는?", "당신이 좋아하는 동물은?" };
+	
 	List<MyButton> buttons;
 	List<JComponent> comps;
 	List<JTextField> fields;
-
-	String[] questions = { "당신이 좋아하는 음식은?", "당신이 졸업한 초등학교는?", "당신이 좋아하는 동물은?" };
-
-	public static final int ID = 0;
-	public static final int PASS = 1;
-	public static final int NAME = 2;
-	public static final int QUESTION = 3;
 	
-	public static final int SIGN_UP = 0;
+	public static final int ID = 0;
+	public static final int QUESTION = 1;
+	
+	public static final int FIND = 0;
 	public static final int BACK = 1;
-
-	public SignUpPage(DietDiaryMain main) {
+	
+	public ForgotPasswordPage(DietDiaryMain main) {
 		super(main);
-
-		lbTitle = new MyTitle("Sign Up", this, 3);
-		pFormWrapper = new MyFormWrapper(this, 4 / 5.0, 0.5);
+		
+		lbTitle = new MyTitle("Finding Password", this, 3);
+		pFormWrapper = new MyFormWrapper(this, 4 / 5.0, 0.5 * 1/2);
 		pInputForm = new MyInputForm();
 		pButtonForm = new MyButtonForm();
-
+		
 		// 폼 필드 작성
 		pInputForm.addFormField("ID", 10, 20);
-		pInputForm.addFormPasswordField("Pass", 10, 20);
-		pInputForm.addFormField("Name", 10, 20);
 		pInputForm.addCombobox(questions, 10, 20);
-
+		
 		// 버튼 필드 작성
-		pButtonForm.addMyButton("Sign Up");
+		pButtonForm.addMyButton("Find");
 		pButtonForm.addMyButton("Back");
-
+		
 		pFormWrapper.add(pInputForm);
 		pFormWrapper.add(pButtonForm, BorderLayout.SOUTH);
-
+		
 		add(lbTitle);
 		add(pFormWrapper);
-
+		
 		// 컴포넌트들 가져오기
 		buttons = pButtonForm.getButtons();
 		comps = pInputForm.getComps(); //주제 컴포넌트 리스트 가져오기
@@ -76,31 +72,30 @@ public class SignUpPage extends Page implements ActionListener {
 			buttons.get(i).addActionListener(this);
 		}
 	}
-
-	public void regist() {
-		DietDiaryMembers members = new DietDiaryMembers();
-		members.setId(fields.get(ID).getText());
-		String encodedPass =  StringUtil.getConvertedPassword((String.valueOf(((JPasswordField)fields.get(PASS)).getPassword())));
-		members.setPass(encodedPass);
-		members.setName(fields.get(NAME).getText());
-		members.setQuestion(((JComboBox<String>)comps.get(QUESTION)).getSelectedIndex());
-		String encodedAnswer =  StringUtil.getConvertedPassword(fields.get(QUESTION).getText());		
-		members.setAnswer(encodedAnswer);
-		int result = main.membersDAO.insert(members);
-		if(result > 0) {
-			JOptionPane.showMessageDialog(main, "회원가입 완료");
+	
+	public void findPass() {
+		DietDiaryMembers result = main.membersDAO.selectByID(fields.get(ID).getText());
+		
+		if(result == null) {
+			JOptionPane.showMessageDialog(main, "해당하는 계정이 없습니다");
 			clearForm();
-			main.showHide(DietDiaryMain.SIGN_IN_PAGE);
 		}else {
-			JOptionPane.showMessageDialog(main, "회원가입 실패");
+			int findingQuestion =  ((JComboBox<String>)comps.get(QUESTION)).getSelectedIndex();
+			String findingAnswer = StringUtil.getConvertedPassword(fields.get(QUESTION).getText());
+			
+			if(result.getQuestion() == findingQuestion && findingAnswer.equals(result.getAnswer())) {
+				JOptionPane.showMessageDialog(main, "성공입니다");
+				clearForm();
+				ChangePasswordPage page = (ChangePasswordPage)main.getPages().get(DietDiaryMain.CHANGE_PASSWORD_PAGE);
+				page.getAccount(result);
+				main.showHide(DietDiaryMain.CHANGE_PASSWORD_PAGE);
+				page.getFields().get(ChangePasswordPage.PASS).grabFocus();
+			}else {
+				JOptionPane.showMessageDialog(main, "틀렸습니다");
+			}
 		}
 	}
-	
-	public int update(DietDiaryMembers dietDiaryMembers) {
-		return main.membersDAO.updatePassword(dietDiaryMembers);
-	}
 
-	//회원가입 했으면 폼 초기화시키는 메서드
 	public void clearForm() {
 		((JComboBox<String>)comps.get(QUESTION)).setSelectedIndex(0);
 		for(int i =0;i<fields.size();i++) {
@@ -111,8 +106,8 @@ public class SignUpPage extends Page implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		Object obj = e.getSource();
-		if (obj.equals(buttons.get(SIGN_UP))) {
-			regist();
+		if (obj.equals(buttons.get(FIND))) {
+			findPass();
 		} else if (obj.equals(buttons.get(BACK))) {
 			SignInPage page = (SignInPage)main.getPages().get(DietDiaryMain.SIGN_IN_PAGE);
 			page.clearForm();
@@ -120,8 +115,8 @@ public class SignUpPage extends Page implements ActionListener {
 			clearForm();
 		}
 	}
-	
 	public List<JTextField> getFields() {
 		return fields;
 	}
+
 }

@@ -131,9 +131,13 @@ public class SignInPage extends Page implements ActionListener {
 		if (obj.equals(buttons.get(SIGN_IN))) {
 			signIn();
 		} else if (obj.equals(buttons.get(SIGN_UP))) {
+			SignUpPage page = (SignUpPage)main.getPages().get(DietDiaryMain.SIGN_UP_PAGE);
 			main.showHide(SIGN_UP);
+			page.getFields().get(SignUpPage.ID).grabFocus();
 		} else if (obj.equals(buttons.get(FORGOT_PASSWORD))) {
-			System.out.println("비밀번호 찾기 눌림");
+			ForgotPasswordPage page = (ForgotPasswordPage)main.getPages().get(DietDiaryMain.FORGOT_PASSWORD_PAGE);
+			main.showHide(DietDiaryMain.FORGOT_PASSWORD_PAGE);
+			page.getFields().get(ForgotPasswordPage.ID).grabFocus();
 		}
 	}
 
