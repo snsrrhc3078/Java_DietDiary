@@ -158,7 +158,12 @@ public class DiaryPage extends Page {
 		
 	}
 	public void moveMonth(int n) {
-		currentTime.set(Calendar.MONTH, currentTime.get(Calendar.MONTH)+n);
+//		currentTime.set(Calendar.MONTH, currentTime.get(Calendar.MONTH)+n);
+		if(n==1) {
+			currentTime.set(Calendar.DATE, getDateOfLast(currentTime)+1);
+		}else if(n==-1){
+			currentTime.set(Calendar.DATE, 0);
+		}
 	}
 	public void setMonth() {
 		month.setText(currentTime.get(Calendar.YEAR)+"년 " + (currentTime.get(Calendar.MONTH)+1) + "월");
