@@ -74,6 +74,9 @@ public class ChangePasswordPage extends Page implements ActionListener{
 	}
 	
 	public void changePass() {
+		
+		if(emptyWarning()) return;
+		
 		if(fields.get(PASS).getText().equals(fields.get(PASS_CONFIRM).getText())) {
 			String encodedPass =  StringUtil.getConvertedPassword((String.valueOf(((JPasswordField)fields.get(PASS)).getPassword())));
 			members.setPass(encodedPass);
@@ -92,6 +95,20 @@ public class ChangePasswordPage extends Page implements ActionListener{
 		}else {
 			JOptionPane.showMessageDialog(main, "비밀번호와 비밀번화 확인이 동일하지 않습니다");
 		}
+	}
+	
+	public boolean emptyWarning() {
+		if(fields.get(PASS).getText().equals("")) {
+			JOptionPane.showMessageDialog(main, "비밀번호를 입력해주세요");
+			fields.get(PASS).grabFocus();
+			return true;
+		}else if(fields.get(PASS_CONFIRM).getText().equals("")) {
+			JOptionPane.showMessageDialog(main, "비밀번호 확인을 입력해주세요");
+			fields.get(PASS_CONFIRM).grabFocus();
+			return true;
+		}
+		
+		return false;
 	}
 	
 	public void clearForm() {

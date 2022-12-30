@@ -78,6 +78,9 @@ public class SignUpPage extends Page implements ActionListener {
 	}
 
 	public void regist() {
+		
+		if(emptyWarning()) return;
+		
 		DietDiaryMembers members = new DietDiaryMembers();
 		members.setId(fields.get(ID).getText());
 		String encodedPass =  StringUtil.getConvertedPassword((String.valueOf(((JPasswordField)fields.get(PASS)).getPassword())));
@@ -98,6 +101,29 @@ public class SignUpPage extends Page implements ActionListener {
 	
 	public int update(DietDiaryMembers dietDiaryMembers) {
 		return main.membersDAO.updatePassword(dietDiaryMembers);
+	}
+	
+	public boolean emptyWarning() {
+		if(fields.get(ID).getText().equals("")) {
+			JOptionPane.showMessageDialog(main, "아이디를 입력해주세요");
+			fields.get(ID).grabFocus();
+			return true;
+		}else if(fields.get(PASS).getText().equals("")) {
+			JOptionPane.showMessageDialog(main, "비밀번호를 입력해주세요");
+			fields.get(PASS).grabFocus();
+			return true;
+		}else if(fields.get(NAME).getText().equals("")) {
+			JOptionPane.showMessageDialog(main, "닉네임을 입력해주세요");
+			fields.get(NAME).grabFocus();
+			return true;
+		}else if(fields.get(QUESTION).getText().equals("")) {
+			JOptionPane.showMessageDialog(main, "비밀번호 찾기 정답을 입력해주세요");
+			fields.get(QUESTION).grabFocus();
+			return true;
+		}
+		
+		
+		return false;
 	}
 
 	//회원가입 했으면 폼 초기화시키는 메서드

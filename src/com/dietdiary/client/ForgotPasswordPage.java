@@ -74,11 +74,15 @@ public class ForgotPasswordPage extends Page implements ActionListener{
 	}
 	
 	public void findPass() {
+		
+		if(emptyWarning()) return;
+		
 		DietDiaryMembers result = main.membersDAO.selectByID(fields.get(ID).getText());
 		
 		if(result == null) {
 			JOptionPane.showMessageDialog(main, "해당하는 계정이 없습니다");
 			clearForm();
+			fields.get(ID).grabFocus();
 		}else {
 			int findingQuestion =  ((JComboBox<String>)comps.get(QUESTION)).getSelectedIndex();
 			String findingAnswer = StringUtil.getConvertedPassword(fields.get(QUESTION).getText());
@@ -92,8 +96,23 @@ public class ForgotPasswordPage extends Page implements ActionListener{
 				page.getFields().get(ChangePasswordPage.PASS).grabFocus();
 			}else {
 				JOptionPane.showMessageDialog(main, "틀렸습니다");
+				fields.get(QUESTION).grabFocus();
 			}
 		}
+	}
+	
+	public boolean emptyWarning() {
+		if(fields.get(ID).getText().equals("")) {
+			JOptionPane.showMessageDialog(main, "아이디를 입력해주세요");
+			fields.get(ID).grabFocus();
+			return true;
+		}else if(fields.get(QUESTION).getText().equals("")) {
+			JOptionPane.showMessageDialog(main, "비밀번호 찾기 정답을 입력해주세요");
+			fields.get(QUESTION).grabFocus();
+			return true;
+		}
+		
+		return false;
 	}
 
 	public void clearForm() {
