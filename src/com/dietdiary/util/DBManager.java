@@ -11,8 +11,8 @@ import java.sql.SQLException;
 public class DBManager {
 	
 	String oracle_driver = "oracle.jdbc.driver.OracleDriver";
-	String oracle_url = "jdbc:oracle:thin:@localhost:1521:XE";
-	String oracle_user = "javase";
+	String oracle_url = "jdbc:oracle:thin:@3.37.216.159:1521:XE";
+	String oracle_user = "dietdiary";
 	String oracle_pass = "1234";
 	
 	String mysql_driver = "com.mysql.jdbc.Driver";

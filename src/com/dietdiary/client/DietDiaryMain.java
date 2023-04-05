@@ -5,6 +5,8 @@ import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.lang.reflect.Field;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 
 import javax.swing.JFrame;
@@ -117,6 +119,15 @@ public class DietDiaryMain extends JFrame{
 	
 	
 	public static void main(String[] args) {
+		System.setProperty("file.encoding","UTF-8");
+		try{
+			Field charset = Charset.class.getDeclaredField("defaultCharset");
+			charset.setAccessible(true);
+			charset.set(null,null);
+		}catch(Exception e){
+			  
+		}
+		
 		new DietDiaryMain();
 	}
 	
